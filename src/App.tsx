@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Lenis from "lenis";
 import LoadingScreen from "./components/LoadingScreen";
-import Hero from "./components/Hero";
-import Projects from "./components/Projects";
-import Now from "./components/Now";
-import About from "./components/About";
-import Contact from "./components/Contact";
+import StarField from "./components/StarField";
+import HeroPage from "./pages/HeroPage";
+import ProjectsPage from "./pages/ProjectsPage";
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -41,31 +42,35 @@ function App() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-charcoal">
-      {/* Grain overlay for film texture */}
-      {/* <div className="grain-overlay" /> */}
+    <Router>
+      <div
+        className="relative min-h-screen"
+        style={{ backgroundColor: "#040404" }}
+      >
+        {/* Subtle star field background */}
 
-      <AnimatePresence mode="wait">
-        {isLoading ? (
-          <LoadingScreen key="loading" />
-        ) : (
-          <motion.div
-            key="content"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="relative z-10"
-          >
-            <Hero />
-
-            {/* <Projects />
-            <Now />
-            <About />
-            <Contact /> */}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+        <AnimatePresence mode="wait">
+          {isLoading ? (
+            <LoadingScreen key="loading" />
+          ) : (
+            <motion.div
+              key="content"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="relative z-10"
+            >
+              <Routes>
+                <Route path="/" element={<HeroPage />} />
+                <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+              </Routes>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </Router>
   );
 }
 

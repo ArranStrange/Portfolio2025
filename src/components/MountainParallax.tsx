@@ -7,7 +7,13 @@ interface MountainLayer {
   finalOffset: number;
 }
 
-const MountainParallax: React.FC = () => {
+interface MountainParallaxProps {
+  onAnimationComplete?: () => void;
+}
+
+const MountainParallax: React.FC<MountainParallaxProps> = ({
+  onAnimationComplete,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Mountain layer configurations
@@ -55,8 +61,8 @@ const MountainParallax: React.FC = () => {
     <section
       ref={containerRef}
       id="mountain-section"
-      className="h-screen relative w-full bg-black overflow-hidden"
-      style={{ backgroundColor: "black", height: "100vh" }}
+      className="h-screen relative w-full overflow-hidden"
+      style={{ height: "100vh" }}
     >
       {/* Mountain Layers */}
       {mountainLayers.map((layer, index) => {
@@ -110,9 +116,15 @@ const MountainParallax: React.FC = () => {
                 : { y: 800, opacity: 1 }
             }
             transition={{
-              duration: 1.5 + index * 0.8,
-              delay: index * 0.8,
+              duration: 0.8 + index * 0.4,
+              delay: index * 0.4,
               ease: "easeOut",
+            }}
+            onAnimationComplete={() => {
+              // Trigger callback when the last mountain (Mountain 1) completes
+              if (index === 5) {
+                onAnimationComplete?.();
+              }
             }}
           >
             <img
@@ -138,7 +150,7 @@ const MountainParallax: React.FC = () => {
         className="absolute bottom-0 left-0 w-full h-1/2 pointer-events-none z-10"
         style={{
           background:
-            "linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.8) 100%)",
+            "linear-gradient(to bottom, transparent 0%, rgba(4, 4, 4, 0.3) 50%, rgba(4, 4, 4, 0.8) 100%)",
         }}
       />
     </section>
