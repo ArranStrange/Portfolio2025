@@ -122,19 +122,6 @@ const Projects = () => {
       className="h-screen flex flex-col"
       style={{ height: `${projects.length * 100}vh` }}
     >
-      {/* Section Header */}
-      <div className="section-padding pt-20 pb-8 flex-shrink-0 sticky top-0 z-10 bg-charcoal/80 backdrop-blur-sm">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="section-title"
-        >
-          Projects
-        </motion.h2>
-      </div>
-
       {/* Horizontal scroll container */}
       <div className="flex-1 overflow-hidden">
         <div

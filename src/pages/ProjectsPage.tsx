@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import Projects from "../components/Projects";
+import PebblesPhysics from "../components/PebblesPhysics";
 
 const ProjectsPage = () => {
   return (
@@ -10,6 +11,7 @@ const ProjectsPage = () => {
       transition={{ duration: 0.5 }}
       className="relative z-10"
     >
+      <PebblesPhysics />
       <Projects />
     </motion.div>
   );
