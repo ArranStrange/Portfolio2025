@@ -114,7 +114,7 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
 
     // Create engine with heavier gravity
     const engine = Matter.Engine.create({
-      gravity: { x: 0, y: 1, scale: 0.003 },
+      gravity: { x: 0, y: 1, scale: 0.004 },
     });
     engineRef.current = engine;
 
@@ -137,7 +137,7 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     // Create ground at the very bottom of the component
     const ground = Matter.Bodies.rectangle(
       rect.width / 2,
-      rect.height / 1,
+      rect.height,
       rect.width,
       10,
       {
@@ -167,7 +167,7 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     // Create bottom wall to catch any pebbles that fall through
     const bottomWall = Matter.Bodies.rectangle(
       rect.width / 2,
-      rect.height + 5,
+      rect.height,
       rect.width,
       10,
       { isStatic: true, render: { fillStyle: "transparent" } }
@@ -241,6 +241,43 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
 
     setPebbles(newPebbles);
   }, [createPebble, pebbleImages, preloadImages, isMobile]);
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (!containerRef.current) return;
+
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      // Apply subtle force to nearby pebbles
+      if (engineRef.current && pebbles.length > 0) {
+        const mouseRadius = 80; // Radius of effect
+
+        pebbles.forEach((pebble) => {
+          const pebblePos = pebble.body.position;
+          const distance = Math.sqrt(
+            Math.pow(pebblePos.x - x, 2) + Math.pow(pebblePos.y - y, 2)
+          );
+
+          if (distance < mouseRadius) {
+            const force = ((mouseRadius - distance) / mouseRadius) * 0.0005;
+            const angle = Math.atan2(pebblePos.y - y, pebblePos.x - x);
+
+            Matter.Body.applyForce(pebble.body, pebblePos, {
+              x: Math.cos(angle) * force,
+              y: Math.sin(angle) * force,
+            });
+          }
+        });
+      }
+    },
+    [pebbles]
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    // Mouse left the component
+  }, []);
 
   const handleMouseEnter = useCallback(() => {
     // Manual trigger not needed since auto-trigger is working
@@ -471,8 +508,10 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
   return (
     <section
       ref={containerRef}
-      className="h-screen relative w-full overflow-hidden bg-charcoal"
+      className="h-screen relative w-full overflow-hidden"
       onMouseEnter={handleMouseEnter}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       onTouchStart={handleTouchStart}
     >
       {/* StarField background */}
