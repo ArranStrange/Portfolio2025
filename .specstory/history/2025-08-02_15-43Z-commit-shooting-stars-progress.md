@@ -268,3 +268,153 @@ You can copy this description and use it when creating your pull request on GitH
 
 ---
 
+_**User**_
+
+why do I still have a lot of changes not commited?
+
+---
+
+_**Assistant**_
+
+Let me check the current git status to see what changes are still uncommitted:
+
+
+---
+
+```bash
+git status
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % git status
+On branch main
+Your branch is ahead of 'origin/main' by 2 commits.
+  (use "git push" to publish your local commits)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        .specstory/history/2025-08-02_12-46Z-implement-waves-animation-for-blog-page.md
+        .specstory/history/2025-08-02_15-43Z-commit-shooting-stars-progress.md
+        public/Icons/
+        public/Waves/
+        src/components/BlogCard.tsx
+        src/components/Navigation.tsx
+        src/components/SnapScroll.tsx
+        src/components/WaveParallax.tsx
+        src/pages/BlogPage.tsx
+
+nothing added to commit but untracked files present (use "git add" to track)
+arranstrange@MacBook-Pro-2 Portfolio 2 %
+```
+
+---
+
+I see what happened! You're currently on the `main` branch, not the `Shooting-stars` branch. The uncommitted changes you're seeing are different files that were created during your development session. Let me check what branch you should be on:
+
+
+---
+
+```bash
+git branch -a
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % git branch -a
+  Shooting-stars
+* main
+  remotes/origin/Shooting-stars
+  remotes/origin/main
+arranstrange@MacBook-Pro-2 Portfolio 2 %
+```
+
+---
+
+The issue is that you're currently on the `main` branch (indicated by the `*`), but your shooting stars work was done on the `Shooting-stars` branch. The uncommitted changes you're seeing are actually new files that were created during your development session, including:
+
+- Blog-related components (`BlogCard.tsx`, `BlogPage.tsx`)
+- Wave animations (`WaveParallax.tsx`)
+- Navigation updates (`Navigation.tsx`)
+- New assets (`public/Icons/`, `public/Waves/`)
+- Documentation files (`.specstory/` files)
+
+These appear to be from other features you've been working on. If you want to commit these changes, you have a few options:
+
+1. **Switch back to the Shooting-stars branch** to continue working on that feature:
+   ```bash
+   git checkout Shooting-stars
+   ```
+
+2. **Commit these new changes to main** if they're ready:
+   ```bash
+   git add .
+   git commit -m "Add blog components, wave animations, and navigation updates"
+   ```
+
+3. **Create a new branch** for these changes:
+   ```bash
+   git checkout -b blog-and-waves-features
+   git add .
+   git commit -m "Add blog components, wave animations, and navigation updates"
+   ```
+
+Which approach would you prefer? The shooting stars feature is already committed and pushed to the `Shooting-stars` branch, so these uncommitted changes are separate work.
+
+---
+
+_**User**_
+
+I've merged the shooting star one now. Lets commit this one.
+
+---
+
+_**Assistant**_
+
+Great! Since you've merged the shooting stars branch, let's commit these remaining changes. I'll add all the new files and commit them with a descriptive message:
+
+
+---
+
+```bash
+git add .
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % git add .
+```
+
+---
+
+```bash
+git commit -m "Add blog components, wave animations, navigation updates, and new assets"
+```
+
+```
+<wave animations, navigation updates, and new assets"
+[main 336a97f] Add blog components, wave animations, navigation updates, and new assets
+ 17 files changed, 6783 insertions(+)
+ create mode 100644 .specstory/history/2025-08-02_12-46Z-implement-waves-animation-for-blog-page.md
+ create mode 100644 .specstory/history/2025-08-02_15-43Z-commit-shooting-stars-progress.md
+ create mode 100644 public/Icons/Black Book.png
+ create mode 100644 public/Icons/Sticky Fingers.png
+ create mode 100644 public/Icons/VISOR.png
+ create mode 100644 public/Icons/Weather App.png
+ create mode 100644 public/Waves/Wave 1.png
+ create mode 100644 public/Waves/Wave 2.png
+ create mode 100644 public/Waves/Wave 3.png
+ create mode 100644 public/Waves/Wave 4.png
+ create mode 100644 public/Waves/Wave 5.png
+ create mode 100644 public/Waves/Wave 6.png
+ create mode 100644 src/components/BlogCard.tsx
+ create mode 100644 src/components/Navigation.tsx
+ create mode 100644 src/components/SnapScroll.tsx
+ create mode 100644 src/components/WaveParallax.tsx
+ create mode 100644 src/pages/BlogPage.tsx
+arranstrange@MacBook-Pro-2 Portfolio 2 %
+```
+
+---
+
+
+
+---
+
