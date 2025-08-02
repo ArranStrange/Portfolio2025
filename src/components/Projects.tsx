@@ -111,7 +111,7 @@ const Projects = () => {
             <div className="space-y-4 md:space-y-5">
               {/* Title */}
               <motion.h2
-                className="text-2xl md:text-3xl lg:text-4xl font-satoshi font-bold text-warm-white"
+                className="text-2xl md:text-3xl lg:text-4xl font-satoshi font-medium text-warm-white"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
@@ -121,7 +121,7 @@ const Projects = () => {
 
               {/* Description */}
               <motion.p
-                className="text-base md:text-lg lg:text-xl text-warm-white/80 leading-relaxed"
+                className="text-base md:text-lg lg:text-lg font-light text-warm-white/80 leading-relaxed"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
@@ -138,8 +138,12 @@ const Projects = () => {
               >
                 {currentProject.stack.map((tech, index) => (
                   <div key={index} className="flex items-center">
-                    <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-rustic-gold rounded-full mr-1.5 md:mr-2"></div>
-                    <span className="text-xs md:text-sm text-rustic-gold font-satoshi tracking-wide">
+                    <img
+                      src={`https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162596/home/portfolio/pebbles/Pebble_${(index % 12) + 1}.png`}
+                      alt=""
+                      className="w-3 h-3 md:w-4 md:h-4 mr-1.5 md:mr-2 object-contain"
+                    />
+                    <span className="text-xs md:text-sm  font-satoshi font-light tracking-wide">
                       {tech}
                     </span>
                   </div>
