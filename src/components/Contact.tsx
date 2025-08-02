@@ -46,7 +46,7 @@ const Contact = () => {
                 <input
                   type="text"
                   id="name"
-                  className="w-full px-4 py-3 bg-warm-white/5 border border-warm-white/20 rounded-lg text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-rustic-gold transition-colors"
+                  className="w-full px-4 py-3 border border-warm-white/20 rounded-lg text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-rustic-gold transition-colors"
                   placeholder="Your name"
                 />
               </div>
@@ -60,7 +60,7 @@ const Contact = () => {
                 <input
                   type="email"
                   id="email"
-                  className="w-full px-4 py-3 bg-warm-white/5 border border-warm-white/20 rounded-lg text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-rustic-gold transition-colors"
+                  className="w-full px-4 py-3 border border-warm-white/20 rounded-lg text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-rustic-gold transition-colors"
                   placeholder="your@email.com"
                 />
               </div>
@@ -76,7 +76,7 @@ const Contact = () => {
               <textarea
                 id="message"
                 rows={6}
-                className="w-full px-4 py-3 bg-warm-white/5 border border-warm-white/20 rounded-lg text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-rustic-gold transition-colors resize-none"
+                className="w-full px-4 py-3 border border-warm-white/20 rounded-lg text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-rustic-gold transition-colors resize-none"
                 placeholder="Tell me about your project..."
               />
             </div>

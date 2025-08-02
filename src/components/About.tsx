@@ -21,10 +21,10 @@ const About = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="aspect-[16/9] bg-gradient-to-br from-rustic-orange/10 to-rustic-olive/10 rounded-lg border border-warm-white/10 flex items-center justify-center"
+            className="aspect-[16/9] rounded-lg border border-warm-white/10 flex items-center justify-center"
           >
             <div className="text-center space-y-4">
-              <div className="w-16 h-16 mx-auto bg-rustic-gold/20 rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center border border-rustic-gold/20">
                 <svg
                   className="w-8 h-8 text-rustic-gold"
                   fill="none"
@@ -39,7 +39,7 @@ const About = () => {
                   />
                 </svg>
               </div>
-              <p className="text-warm-white/60 font-inter">
+              <p className="text-warm-white/60 font-satoshi">
                 Countryside roots, digital craft
               </p>
             </div>
@@ -101,7 +101,7 @@ const About = () => {
               },
             ].map((value) => (
               <div key={value.title} className="space-y-4">
-                <h3 className="text-xl font-space font-medium text-rustic-gold">
+                <h3 className="text-xl font-satoshi font-medium text-rustic-gold">
                   {value.title}
                 </h3>
                 <p className="text-warm-white/70 leading-relaxed">

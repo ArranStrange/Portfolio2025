@@ -74,7 +74,11 @@ const WaveParallax: React.FC<WaveParallaxProps> = ({ onAnimationComplete }) => {
       ref={containerRef}
       id="wave-section"
       className="h-screen relative w-full overflow-hidden flex items-center justify-center"
-      style={{ height: "100vh", width: "100vw" }}
+      style={{
+        height: "100vh",
+        width: "100vw",
+        background: "transparent",
+      }}
     >
       {/* Wave Layers */}
       {waveLayers.map((layer, index) => {

@@ -394,7 +394,7 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
       <button
         onClick={resetPebbles}
         disabled={isResetting}
-        className="absolute top-4 right-4 z-20 text-warm-white/40 font-inter text-sm hover:text-warm-white/60 transition-colors disabled:opacity-50 cursor-pointer"
+        className="absolute top-4 right-4 z-20 text-warm-white/40 font-satoshi text-sm hover:text-warm-white/60 transition-colors disabled:opacity-50 cursor-pointer"
       >
         {isResetting ? "resetting..." : "reset"}
       </button>
@@ -414,7 +414,7 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="text-warm-white/80 font-space uppercase tracking-wider text-lg md:text-xl"
+          className="text-warm-white/80 font-satoshi uppercase tracking-wider text-lg md:text-xl"
         >
           Projects
         </motion.div>

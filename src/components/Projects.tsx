@@ -77,10 +77,10 @@ const Projects = () => {
           >
             {/* Preview Section */}
             <div className="mb-6 md:mb-8">
-              <div className="aspect-video bg-gray-900/80 border border-warm-white/20 rounded-lg overflow-hidden relative">
+              <div className="aspect-video border border-warm-white/20 rounded-lg overflow-hidden relative">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
-                    <div className="text-warm-white/60 font-inter text-sm md:text-lg mb-2 md:mb-4">
+                    <div className="text-warm-white/60 font-satoshi text-sm md:text-lg mb-2 md:mb-4">
                       {currentProject.title} Preview
                     </div>
                     {/* Mountain silhouette */}
@@ -111,7 +111,7 @@ const Projects = () => {
             <div className="space-y-4 md:space-y-5">
               {/* Title */}
               <motion.h2
-                className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-warm-white"
+                className="text-2xl md:text-3xl lg:text-4xl font-satoshi font-bold text-warm-white"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
@@ -139,7 +139,7 @@ const Projects = () => {
                 {currentProject.stack.map((tech, index) => (
                   <div key={index} className="flex items-center">
                     <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-rustic-gold rounded-full mr-1.5 md:mr-2"></div>
-                    <span className="text-xs md:text-sm text-rustic-gold font-mono tracking-wide">
+                    <span className="text-xs md:text-sm text-rustic-gold font-satoshi tracking-wide">
                       {tech}
                     </span>
                   </div>
@@ -153,7 +153,7 @@ const Projects = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
               >
-                <button className="px-6 md:px-8 py-2 md:py-3 border border-warm-white/20 rounded-lg text-warm-white hover:bg-warm-white/5 transition-colors font-inter text-sm md:text-base">
+                <button className="px-6 md:px-8 py-2 md:py-3 border border-warm-white/20 rounded-lg text-warm-white hover:bg-warm-white/5 transition-colors font-satoshi text-sm md:text-base">
                   View Project
                 </button>
               </motion.div>
@@ -164,7 +164,7 @@ const Projects = () => {
           <div className="flex justify-between items-center mt-6 md:mt-8">
             <button
               onClick={prevProject}
-              className="text-warm-white/60 hover:text-warm-white transition-colors font-inter text-xs md:text-sm"
+              className="text-warm-white/60 hover:text-warm-white transition-colors font-satoshi text-xs md:text-sm"
             >
               ← Previous
             </button>
@@ -185,7 +185,7 @@ const Projects = () => {
 
             <button
               onClick={nextProject}
-              className="text-warm-white/60 hover:text-warm-white transition-colors font-inter text-xs md:text-sm"
+              className="text-warm-white/60 hover:text-warm-white transition-colors font-satoshi text-xs md:text-sm"
             >
               Next →
             </button>

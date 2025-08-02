@@ -40,7 +40,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
         y: -5,
         transition: { duration: 0.2 },
       }}
-      className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20 hover:border-white/40 transition-all duration-300 cursor-pointer group"
+      className="backdrop-blur-sm rounded-lg p-6 border border-white/20 hover:border-white/40 transition-all duration-300 cursor-pointer group"
       onClick={() => window.open(post.url, "_blank")}
     >
       {/* Cover Image */}
@@ -61,7 +61,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
           {post.tag_list.slice(0, 3).map((tag, tagIndex) => (
             <span
               key={tagIndex}
-              className="px-2 py-1 bg-warm-white/20 text-warm-white/80 text-xs rounded-full"
+              className="px-2 py-1 border border-warm-white/20 text-warm-white/80 text-xs rounded-full"
             >
               #{tag}
             </span>

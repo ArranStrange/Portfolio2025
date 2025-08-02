@@ -1,17 +1,20 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   useLocation,
 } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Lenis from "lenis";
-import LoadingScreen from "./components/LoadingScreen";
 import HeroPage from "./pages/HeroPage";
 import ProjectsPage from "./pages/ProjectsPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import Navigation from "./components/Navigation";
+import BlogPage from "./pages/BlogPage";
+import ShootingStars from "./components/ShootingStars";
+import StarField from "./components/StarField";
 
 // Component to handle scroll to top on route changes
 function ScrollToTop() {
@@ -31,8 +34,6 @@ function ScrollToTop() {
 }
 
 function App() {
-  const [isLoading, setIsLoading] = useState(false);
-
   useEffect(() => {
     // Initialize Lenis for smooth scrolling
     const lenis = new Lenis({
@@ -50,13 +51,7 @@ function App() {
 
     requestAnimationFrame(raf);
 
-    // Simulate loading time
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-
     return () => {
-      clearTimeout(timer);
       lenis.destroy();
       delete (window as any).lenis;
     };
@@ -68,28 +63,25 @@ function App() {
         {/* Scroll to top component */}
         <ScrollToTop />
 
-        {/* Subtle star field background */}
+        {/* Shooting stars background */}
+        <ShootingStars />
+        <StarField starCount={750} />
 
-        <AnimatePresence mode="wait">
-          {isLoading ? (
-            <LoadingScreen key="loading" />
-          ) : (
-            <motion.div
-              key="content"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="relative z-10"
-            >
-              <Routes>
-                <Route path="/" element={<HeroPage />} />
-                <Route path="/projects" element={<ProjectsPage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-              </Routes>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="relative z-10"
+        >
+          <Navigation />
+          <Routes>
+            <Route path="/" element={<HeroPage />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+          </Routes>
+        </motion.div>
       </div>
     </Router>
   );

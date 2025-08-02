@@ -40,7 +40,7 @@ const Hero = () => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="text-warm-white/80 font-space uppercase tracking-wider text-lg"
+            className="text-warm-white/80 font-satoshi uppercase tracking-wider text-lg"
           >
             Scroll
           </motion.div>

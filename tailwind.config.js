@@ -6,6 +6,8 @@ export default {
       fontFamily: {
         space: ["Space Grotesk", "monospace"],
         inter: ["Inter", "sans-serif"],
+        satoshi: ["Satoshi", "sans-serif"],
+        sans: ["Satoshi", "sans-serif"],
       },
       colors: {
         charcoal: "#1a1a1a",
@@ -62,27 +64,28 @@ export default {
     },
   },
   plugins: [
-    function({ addComponents, theme }) {
+    function ({ addComponents, theme }) {
       addComponents({
-        '.card': {
-          '@apply backdrop-blur-sm border-4 border-warm-white/30 rounded-lg': {},
+        ".card": {
+          "@apply backdrop-blur-sm border-4 border-warm-white/30 rounded-lg":
+            {},
         },
-        '.card-sm': {
-          '@apply card p-4 md:p-6': {},
+        ".card-sm": {
+          "@apply card p-4 md:p-6": {},
         },
-        '.card-md': {
-          '@apply card p-6 md:p-8': {},
+        ".card-md": {
+          "@apply card p-6 md:p-8": {},
         },
-        '.card-lg': {
-          '@apply card p-8 md:p-10 lg:p-12': {},
+        ".card-lg": {
+          "@apply card p-8 md:p-10 lg:p-12": {},
         },
-        '.card-accent': {
-          '@apply card border-rustic-gold/40': {},
+        ".card-accent": {
+          "@apply card border-rustic-gold/40": {},
         },
-        '.card-subtle': {
-          '@apply card border-warm-white/20': {},
+        ".card-subtle": {
+          "@apply card border-warm-white/20": {},
         },
-      })
-    }
+      });
+    },
   ],
 };

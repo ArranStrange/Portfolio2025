@@ -67,7 +67,7 @@ const IntroText: React.FC<IntroTextProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.4 }}
-              className="absolute top-8 right-6 text-warm-white/60 font-space uppercase tracking-wider text-xs z-20"
+              className="absolute top-8 right-6 text-warm-white/60 font-satoshi uppercase tracking-wider text-xs z-20"
             >
               Hover to highlight
             </motion.div>
@@ -92,7 +92,7 @@ const IntroText: React.FC<IntroTextProps> = ({
                   color: hoveredSection === index ? "#f8f8f2" : "#6b7280",
                 }}
                 transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="font-space uppercase tracking-wide text-sm"
+                className="font-satoshi uppercase tracking-wide text-sm"
               >
                 {section.label}
               </motion.div>
