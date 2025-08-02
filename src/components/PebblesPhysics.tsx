@@ -28,13 +28,9 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
 
   const [pebbles, setPebbles] = useState<Pebble[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
-  const [imagesLoaded, setImagesLoaded] = useState(0);
-  const [totalImages, setTotalImages] = useState(0);
-  const [isResetting, setIsResetting] = useState(false);
-  const [hasTriggered, setHasTriggered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const hasTriggeredRef = useRef(false);
-  const resetButtonRef = useRef<HTMLButtonElement>(null);
+  const [isResetting, setIsResetting] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
 
   // Pebble configurations
   const pebbleImages = [
@@ -54,19 +50,15 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
 
   // Preload images
   const preloadImages = useCallback(() => {
-    const imagePromises = pebbleImages.map((src) => {
-      return new Promise<HTMLImageElement>((resolve) => {
-        const img = new Image();
-        img.onload = () => {
-          setImagesLoaded((prev) => prev + 1);
-          resolve(img);
-        };
-        img.src = src;
-      });
-    });
-
-    setTotalImages(pebbleImages.length);
-    return Promise.all(imagePromises);
+    return Promise.all(
+      pebbleImages.map((src) => {
+        return new Promise<HTMLImageElement>((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.src = src;
+        });
+      })
+    );
   }, [pebbleImages]);
 
   const createPebble = useCallback(
@@ -78,9 +70,9 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
       element: HTMLImageElement
     ): Pebble => {
       const body = Matter.Bodies.circle(x, y, size, {
-        restitution: 0.3,
-        friction: 0.8,
-        density: 0.003,
+        restitution: 0.4,
+        friction: 0.6,
+        density: 0.002,
         render: {
           fillStyle: "transparent",
         },
@@ -112,9 +104,9 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     canvas.width = rect.width;
     canvas.height = rect.height;
 
-    // Create engine with heavier gravity
+    // Create engine with lighter gravity for smoother movement
     const engine = Matter.Engine.create({
-      gravity: { x: 0, y: 1, scale: 0.004 },
+      gravity: { x: 0, y: 1, scale: 0.003 },
     });
     engineRef.current = engine;
 
@@ -134,49 +126,35 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     });
     renderRef.current = render;
 
-    // Create ground at the very bottom of the component
+    // Create invisible boundaries
     const ground = Matter.Bodies.rectangle(
       rect.width / 2,
-      rect.height,
+      rect.height - 5,
       rect.width,
-      10,
-      {
-        isStatic: true,
-        render: { fillStyle: "transparent" },
-        restitution: 0.2,
-      }
+      20,
+      { isStatic: true, render: { fillStyle: "transparent" } }
     );
 
-    // Create side walls to keep pebbles on screen
     const leftWall = Matter.Bodies.rectangle(
-      -5,
+      -10,
       rect.height / 2,
-      10,
+      20,
       rect.height,
       { isStatic: true, render: { fillStyle: "transparent" } }
     );
 
     const rightWall = Matter.Bodies.rectangle(
-      rect.width + 5,
+      rect.width + 10,
       rect.height / 2,
-      10,
+      20,
       rect.height,
       { isStatic: true, render: { fillStyle: "transparent" } }
     );
 
-    // Create bottom wall to catch any pebbles that fall through
-    const bottomWall = Matter.Bodies.rectangle(
-      rect.width / 2,
-      rect.height,
-      rect.width,
-      10,
-      { isStatic: true, render: { fillStyle: "transparent" } }
-    );
+    // Add boundaries to world
+    Matter.World.add(engine.world, [ground, leftWall, rightWall]);
 
-    // Add all bodies to world
-    Matter.World.add(engine.world, [ground, leftWall, rightWall, bottomWall]);
-
-    // Create mouse constraint for dragging
+    // Create mouse constraint for dragging pebbles
     const mouse = Matter.Mouse.create(render.canvas);
     mouseRef.current = mouse;
 
@@ -202,30 +180,29 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     setIsInitialized(true);
   }, []);
 
-  const addPebbles = useCallback(async () => {
-    if (!engineRef.current || !containerRef.current) return;
+  const startPebbleDrop = useCallback(async () => {
+    if (!engineRef.current || !containerRef.current || hasStarted) return;
 
-    // Preload all images first
+    setHasStarted(true);
     const loadedImages = await preloadImages();
 
     const container = containerRef.current;
     const rect = container.getBoundingClientRect();
     const newPebbles: Pebble[] = [];
 
-    // Determine pebble count based on screen size
-    const totalPebbles = isMobile ? 15 : 40;
+    // Responsive pebble count
+    const totalPebbles = isMobile ? 12 : 24;
+    const pebblesPerRow = isMobile ? 4 : 6;
+    const spacing = rect.width / (pebblesPerRow + 1);
 
-    // Create pebbles spread across the full width at the top
-    const pebblesPerRow = isMobile ? 5 : 8; // More pebbles per row for better spread
-    const spacing = rect.width / (pebblesPerRow + 1); // Even spacing across width
-
+    // Create pebbles
     for (let i = 0; i < totalPebbles; i++) {
       const row = Math.floor(i / pebblesPerRow);
       const col = i % pebblesPerRow;
 
-      const x = spacing + col * spacing; // Spread across full width
-      const y = 50 + row * 30; // Slight vertical offset for each row
-      const size = isMobile ? 20 + Math.random() * 10 : 25 + Math.random() * 15;
+      const x = spacing + col * spacing;
+      const y = -50 - row * 40; // Start above the screen
+      const size = isMobile ? 18 + Math.random() * 8 : 22 + Math.random() * 12;
       const imageIndex = Math.floor(Math.random() * pebbleImages.length);
 
       const pebble = createPebble(
@@ -236,68 +213,66 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
         loadedImages[imageIndex]
       );
       newPebbles.push(pebble);
-      Matter.World.add(engineRef.current.world, pebble.body);
     }
 
     setPebbles(newPebbles);
-  }, [createPebble, pebbleImages, preloadImages, isMobile]);
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
-      if (!containerRef.current) return;
+    // Staggered drop over 2.5 seconds
+    const dropDuration = 2500;
+    const dropInterval = dropDuration / totalPebbles;
 
-      const rect = containerRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+    newPebbles.forEach((pebble, index) => {
+      setTimeout(() => {
+        if (pebble.body && engineRef.current) {
+          Matter.World.add(engineRef.current.world, pebble.body);
 
-      // Apply subtle force to nearby pebbles
-      if (engineRef.current && pebbles.length > 0) {
-        const mouseRadius = 80; // Radius of effect
+          // Add slight random velocity
+          const randomX = (Math.random() - 0.5) * 0.5;
+          const randomY = Math.random() * 0.3;
 
-        pebbles.forEach((pebble) => {
-          const pebblePos = pebble.body.position;
-          const distance = Math.sqrt(
-            Math.pow(pebblePos.x - x, 2) + Math.pow(pebblePos.y - y, 2)
-          );
+          Matter.Body.setVelocity(pebble.body, {
+            x: randomX,
+            y: randomY,
+          });
+        }
+      }, index * dropInterval);
+    });
 
-          if (distance < mouseRadius) {
-            const force = ((mouseRadius - distance) / mouseRadius) * 0.0005;
-            const angle = Math.atan2(pebblePos.y - y, pebblePos.x - x);
+    onAnimationComplete?.();
+  }, [
+    createPebble,
+    pebbleImages,
+    preloadImages,
+    isMobile,
+    hasStarted,
+    onAnimationComplete,
+  ]);
 
-            Matter.Body.applyForce(pebble.body, pebblePos, {
-              x: Math.cos(angle) * force,
-              y: Math.sin(angle) * force,
-            });
-          }
-        });
-      }
-    },
-    [pebbles]
-  );
+  const resetPebbles = useCallback(() => {
+    if (!engineRef.current) return;
 
-  const handleMouseLeave = useCallback(() => {
-    // Mouse left the component
-  }, []);
+    setIsResetting(true);
+    setHasStarted(false);
 
-  const handleMouseEnter = useCallback(() => {
-    // Manual trigger not needed since auto-trigger is working
-  }, []);
+    // Remove all pebbles from the world
+    pebbles.forEach((pebble) => {
+      Matter.World.remove(engineRef.current!.world, pebble.body);
+    });
 
-  const handleScroll = useCallback(() => {
-    // Manual trigger not needed since auto-trigger is working
-  }, []);
+    setPebbles([]);
 
-  const handleTouchStart = useCallback(() => {
-    // Manual trigger not needed since auto-trigger is working
-  }, []);
+    // Restart after a short delay
+    setTimeout(() => {
+      startPebbleDrop();
+      setIsResetting(false);
+    }, 300);
+  }, [pebbles, startPebbleDrop]);
 
   const handleProjectsClick = useCallback(() => {
-    // Scroll to the next section (Projects component)
-    const nextSection = document.querySelector('section[ref="sectionRef"]');
-    if (nextSection) {
-      nextSection.scrollIntoView({ behavior: "smooth" });
+    const projectsSection = document.querySelector('[data-section="projects"]');
+    if (projectsSection) {
+      projectsSection.scrollIntoView({ behavior: "smooth" });
     } else {
-      // Fallback: scroll down by one viewport height
       window.scrollBy({ top: window.innerHeight, behavior: "smooth" });
     }
   }, []);
@@ -334,49 +309,6 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     });
   }, [pebbles]);
 
-  const resetPebbles = useCallback(() => {
-    if (!engineRef.current) return;
-
-    setIsResetting(true);
-    setHasTriggered(false);
-    hasTriggeredRef.current = false;
-
-    // Remove all pebbles from the world
-    pebbles.forEach((pebble) => {
-      Matter.World.remove(engineRef.current!.world, pebble.body);
-    });
-
-    setPebbles([]);
-
-    // Add new pebbles after a short delay
-    setTimeout(() => {
-      addPebbles();
-      // Auto-trigger the fall after adding pebbles
-      setTimeout(() => {
-        if (
-          engineRef.current &&
-          pebbles.length > 0 &&
-          !hasTriggeredRef.current
-        ) {
-          hasTriggeredRef.current = true;
-          setHasTriggered(true);
-
-          // Add some random velocity to each pebble to make them fall naturally
-          pebbles.forEach((pebble) => {
-            const randomX = (Math.random() - 0.5) * 2;
-            const randomY = Math.random() * 1;
-
-            Matter.Body.setVelocity(pebble.body, {
-              x: randomX,
-              y: randomY,
-            });
-          });
-        }
-      }, 500);
-      setIsResetting(false);
-    }, 500);
-  }, [pebbles, addPebbles]);
-
   // Animation loop for drawing
   useEffect(() => {
     if (!isInitialized || pebbles.length === 0) return;
@@ -403,82 +335,16 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     };
   }, [initializePhysics]);
 
-  // Add pebbles and trigger fall after initialization and image loading
+  // Start pebble drop after initialization
   useEffect(() => {
-    if (isInitialized && imagesLoaded === totalImages && totalImages > 0) {
-      setTimeout(() => {
-        addPebbles();
-        onAnimationComplete?.();
+    if (isInitialized && !hasStarted) {
+      const timer = setTimeout(() => {
+        startPebbleDrop();
+      }, 1000);
 
-        // Trigger fall after pebbles are added
-        setTimeout(() => {
-          if (
-            engineRef.current &&
-            pebbles.length > 0 &&
-            !hasTriggeredRef.current
-          ) {
-            hasTriggeredRef.current = true;
-            setHasTriggered(true);
-
-            // Add some random velocity to each pebble to make them fall naturally
-            pebbles.forEach((pebble) => {
-              const randomX = (Math.random() - 0.5) * 2;
-              const randomY = Math.random() * 1;
-
-              Matter.Body.setVelocity(pebble.body, {
-                x: randomX,
-                y: randomY,
-              });
-            });
-          }
-        }, 1000);
-      }, 300);
+      return () => clearTimeout(timer);
     }
-  }, [
-    isInitialized,
-    imagesLoaded,
-    totalImages,
-    addPebbles,
-    onAnimationComplete,
-  ]);
-
-  // Remove the interval for checking bounds since we have walls
-  useEffect(() => {
-    // No longer needed
-  }, []);
-
-  // Add scroll and touch listeners for better mobile support
-  useEffect(() => {
-    if (!isInitialized || hasTriggered) return;
-
-    const handleScrollEvent = () => {
-      handleScroll();
-    };
-
-    const handleTouchEvent = () => {
-      handleTouchStart();
-    };
-
-    // Add both scroll and touch listeners for better mobile support
-    window.addEventListener("scroll", handleScrollEvent);
-    window.addEventListener("touchstart", handleTouchEvent, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScrollEvent);
-      window.removeEventListener("touchstart", handleTouchEvent);
-    };
-  }, [isInitialized, hasTriggered, handleScroll, handleTouchStart]);
-
-  // Auto-click reset button after 2 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (resetButtonRef.current) {
-        resetButtonRef.current.click();
-      }
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
+  }, [isInitialized, hasStarted, startPebbleDrop]);
 
   // Handle window resize
   useEffect(() => {
@@ -490,7 +356,6 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
       const rect = container.getBoundingClientRect();
       const canvas = canvasRef.current;
 
-      // Update mobile state
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
 
@@ -499,20 +364,21 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
 
       renderRef.current.canvas.width = rect.width;
       renderRef.current.canvas.height = rect.height;
+
+      // Reset pebbles when screen size changes for responsive layout
+      if (hasStarted) {
+        resetPebbles();
+      }
     };
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [hasStarted, resetPebbles]);
 
   return (
     <section
       ref={containerRef}
-      className="h-screen relative w-full overflow-hidden"
-      onMouseEnter={handleMouseEnter}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onTouchStart={handleTouchStart}
+      className="h-screen relative w-full overflow-hidden flex items-center justify-center"
     >
       {/* StarField background */}
       <StarField starCount={150} />
@@ -526,20 +392,19 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
 
       {/* Reset button */}
       <button
-        ref={resetButtonRef}
         onClick={resetPebbles}
         disabled={isResetting}
-        className="absolute top-8 right-8 z-10 text-warm-white/40 font-inter text-sm hover:text-warm-white/60 transition-colors disabled:opacity-50 cursor-pointer"
+        className="absolute top-4 right-4 z-20 text-warm-white/40 font-inter text-sm hover:text-warm-white/60 transition-colors disabled:opacity-50 cursor-pointer"
       >
         {isResetting ? "resetting..." : "reset"}
       </button>
 
-      {/* Projects scroll indicator */}
+      {/* Projects scroll indicator - properly centered */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 1 }}
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 text-center space-y-4 cursor-pointer"
+        className="relative z-10 text-center space-y-4 cursor-pointer"
         onClick={handleProjectsClick}
       >
         <motion.div
@@ -549,7 +414,7 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="text-warm-white/80 font-space uppercase tracking-wider text-lg"
+          className="text-warm-white/80 font-space uppercase tracking-wider text-lg md:text-xl"
         >
           Projects
         </motion.div>
