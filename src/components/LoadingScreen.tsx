@@ -35,7 +35,7 @@ const LoadingScreen = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-charcoal flex items-center justify-center z-50"
+      className="fixed inset-0 flex items-center justify-center z-50"
     >
       {/* Animated grain overlay */}
       <div className="absolute inset-0 opacity-30">

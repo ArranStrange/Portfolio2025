@@ -57,7 +57,6 @@ const IntroText: React.FC<IntroTextProps> = ({
     <div
       id="intro-text-container"
       className="w-full min-h-screen flex flex-col justify-center pointer-events-auto py-20"
-      style={{ backgroundColor: "#040404" }}
     >
       <div className="w-full max-w-6xl mx-auto px-6 md:px-12">
         {/* Scroll indicator - top right */}

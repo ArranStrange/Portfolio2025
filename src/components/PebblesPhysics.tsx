@@ -202,7 +202,7 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
 
       const x = spacing + col * spacing;
       const y = -50 - row * 40; // Start above the screen
-      const size = isMobile ? 18 + Math.random() * 8 : 22 + Math.random() * 12;
+      const size = isMobile ? 25 + Math.random() * 12 : 22 + Math.random() * 12;
       const imageIndex = Math.floor(Math.random() * pebbleImages.length);
 
       const pebble = createPebble(

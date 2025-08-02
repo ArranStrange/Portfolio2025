@@ -144,15 +144,6 @@ const MountainParallax: React.FC<MountainParallaxProps> = ({
           </motion.div>
         );
       })}
-
-      {/* Gradient fade-out overlay */}
-      <div
-        className="absolute bottom-0 left-0 w-full h-1/2 pointer-events-none z-10"
-        style={{
-          background:
-            "linear-gradient(to bottom, transparent 0%, rgba(4, 4, 4, 0.3) 50%, rgba(4, 4, 4, 0.8) 100%)",
-        }}
-      />
     </section>
   );
 };

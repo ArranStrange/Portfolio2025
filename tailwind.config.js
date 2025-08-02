@@ -42,7 +42,47 @@ export default {
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
       },
+      components: {
+        card: {
+          base: "backdrop-blur-sm border-4 border-warm-white/30 rounded-lg",
+          variants: {
+            size: {
+              sm: "p-4 md:p-6",
+              md: "p-6 md:p-8",
+              lg: "p-8 md:p-10 lg:p-12",
+            },
+            variant: {
+              default: "border-warm-white/30",
+              accent: "border-rustic-gold/40",
+              subtle: "border-warm-white/20",
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    function({ addComponents, theme }) {
+      addComponents({
+        '.card': {
+          '@apply backdrop-blur-sm border-4 border-warm-white/30 rounded-lg': {},
+        },
+        '.card-sm': {
+          '@apply card p-4 md:p-6': {},
+        },
+        '.card-md': {
+          '@apply card p-6 md:p-8': {},
+        },
+        '.card-lg': {
+          '@apply card p-8 md:p-10 lg:p-12': {},
+        },
+        '.card-accent': {
+          '@apply card border-rustic-gold/40': {},
+        },
+        '.card-subtle': {
+          '@apply card border-warm-white/20': {},
+        },
+      })
+    }
+  ],
 };

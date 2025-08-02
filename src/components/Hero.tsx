@@ -27,10 +27,7 @@ const Hero = () => {
   return (
     <>
       {/* Section 1: Dark screen with scroll prompt */}
-      <section
-        className="h-screen flex items-center justify-center"
-        style={{ backgroundColor: "#040404" }}
-      >
+      <section className="h-screen flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -72,7 +69,6 @@ const Hero = () => {
             exit={{ opacity: 0, y: 50 }}
             transition={{ duration: 1, ease: "easeOut" }}
             className="min-h-[100vh] flex items-center justify-center py-8"
-            style={{ backgroundColor: "#040404" }}
           >
             <IntroText
               showContinueButton={showContinueButton}
