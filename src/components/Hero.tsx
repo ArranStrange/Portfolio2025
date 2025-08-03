@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MountainParallax from "./MountainParallax";
 import IntroText from "./IntroText";
+import DayNightCycle from "./DayNightCycle";
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -25,8 +26,13 @@ const Hero = () => {
   }, [navigate]);
 
   return (
-    <>
-      {/* Section 1: Dark screen with scroll prompt */}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="relative z-10"
+    >
       <section className="h-screen flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -57,6 +63,8 @@ const Hero = () => {
         </motion.div>
       </section>
 
+      {/* Day/Night Cycle */}
+      <DayNightCycle />
       {/* Section 2: Mountain animation area */}
       <MountainParallax onAnimationComplete={() => setShowIntroText(true)} />
 
@@ -77,7 +85,7 @@ const Hero = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </motion.div>
   );
 };
 

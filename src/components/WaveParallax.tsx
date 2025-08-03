@@ -19,42 +19,42 @@ const WaveParallax: React.FC<WaveParallaxProps> = ({ onAnimationComplete }) => {
   // Wave layer configurations
   const waveLayers: WaveLayer[] = [
     {
-      image: "/Waves/Wave 6.png", // Background wave
+      image: "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162612/home/portfolio/waves/Wave_6.png", // Background wave
       zIndex: 1,
       finalOffset: 0,
       animationSpeed: 4,
       amplitude: 8,
     },
     {
-      image: "/Waves/Wave 5.png",
+      image: "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162610/home/portfolio/waves/Wave_5.png",
       zIndex: 2,
       finalOffset: 50,
       animationSpeed: 3.5,
       amplitude: 10,
     },
     {
-      image: "/Waves/Wave 4.png",
+      image: "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162609/home/portfolio/waves/Wave_4.png",
       zIndex: 3,
       finalOffset: 100,
       animationSpeed: 3,
       amplitude: 12,
     },
     {
-      image: "/Waves/Wave 3.png",
+      image: "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162608/home/portfolio/waves/Wave_3.png",
       zIndex: 4,
       finalOffset: 150,
       animationSpeed: 2.5,
       amplitude: 14,
     },
     {
-      image: "/Waves/Wave 2.png",
+      image: "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162606/home/portfolio/waves/Wave_2.png",
       zIndex: 5,
       finalOffset: 200,
       animationSpeed: 2,
       amplitude: 16,
     },
     {
-      image: "/Waves/Wave 1.png",
+      image: "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162605/home/portfolio/waves/Wave_1.png",
       zIndex: 6,
       finalOffset: 250,
       animationSpeed: 1.5,

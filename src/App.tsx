@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { motion } from "framer-motion";
 import Lenis from "lenis";
-import HeroPage from "./pages/HeroPage";
+import Hero from "./components/Hero";
 import ProjectsPage from "./pages/ProjectsPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
@@ -15,6 +15,8 @@ import Navigation from "./components/Navigation";
 import BlogPage from "./pages/BlogPage";
 import ShootingStars from "./components/ShootingStars";
 import StarField from "./components/StarField";
+import VHSGrainOverlay from "./components/VHSGrainOverlay";
+import DayNightCycle from "./components/DayNightCycle";
 
 // Component to handle scroll to top on route changes
 function ScrollToTop() {
@@ -60,10 +62,9 @@ function App() {
   return (
     <Router>
       <div className="relative min-h-screen">
-        {/* Scroll to top component */}
         <ScrollToTop />
-
-        {/* Shooting stars background */}
+        <VHSGrainOverlay intensity={1} speed={0.8} />
+        <DayNightCycle />
         <ShootingStars />
         <StarField starCount={750} />
 
@@ -75,7 +76,7 @@ function App() {
         >
           <Navigation />
           <Routes>
-            <Route path="/" element={<HeroPage />} />
+            <Route path="/" element={<Hero />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/blog" element={<BlogPage />} />

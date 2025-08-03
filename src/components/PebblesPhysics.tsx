@@ -34,18 +34,18 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
 
   // Pebble configurations
   const pebbleImages = [
-    "/Pebbles/Pebble 1.png",
-    "/Pebbles/Pebble 2.png",
-    "/Pebbles/Pebble 3.png",
-    "/Pebbles/Pebble 4.png",
-    "/Pebbles/Pebble 5.png",
-    "/Pebbles/Pebble 6.png",
-    "/Pebbles/Pebble 7.png",
-    "/Pebbles/Pebble 8.png",
-    "/Pebbles/Pebble 9.png",
-    "/Pebbles/Pebble 10.png",
-    "/Pebbles/Pebble 11.png",
-    "/Pebbles/Pebble 12.png",
+    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162596/home/portfolio/pebbles/Pebble_1.png",
+    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162599/home/portfolio/pebbles/Pebble_2.png",
+    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162600/home/portfolio/pebbles/Pebble_3.png",
+    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162601/home/portfolio/pebbles/Pebble_4.png",
+    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162601/home/portfolio/pebbles/Pebble_5.png",
+    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162602/home/portfolio/pebbles/Pebble_6.png",
+    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162603/home/portfolio/pebbles/Pebble_7.png",
+    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162603/home/portfolio/pebbles/Pebble_8.png",
+    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162604/home/portfolio/pebbles/Pebble_9.png",
+    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162597/home/portfolio/pebbles/Pebble_10.png",
+    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162598/home/portfolio/pebbles/Pebble_11.png",
+    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162598/home/portfolio/pebbles/Pebble_12.png",
   ];
 
   // Preload images
