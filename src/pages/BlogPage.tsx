@@ -52,10 +52,21 @@ const BlogPage: React.FC = () => {
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
-          <motion.div
+          <motion.button
+            onClick={() => {
+              const blogSection = document.querySelector("#blog-posts-section");
+              if (blogSection) {
+                blogSection.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }
+            }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center space-y-4"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="text-center space-y-4 cursor-pointer group"
           >
             <motion.div
               animate={{ y: [0, 10, 0] }}
@@ -64,9 +75,9 @@ const BlogPage: React.FC = () => {
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="text-warm-white/80 font-satoshi font-bold uppercase tracking-wider text-lg"
+              className="text-warm-white/80 font-satoshi font-bold uppercase tracking-wider text-lg group-hover:text-warm-white transition-colors"
             >
-              Blog Posts
+              Blog
             </motion.div>
             <motion.div
               animate={{ y: [0, 10, 0] }}
@@ -76,14 +87,17 @@ const BlogPage: React.FC = () => {
                 ease: "easeInOut",
                 delay: 0.5,
               }}
-              className="w-px h-12 bg-warm-white/40 mx-auto"
+              className="w-px h-12 bg-warm-white/40 mx-auto group-hover:bg-warm-white/60 transition-colors"
             />
-          </motion.div>
+          </motion.button>
         </div>
       </section>
 
       {/* Blog Posts Section */}
-      <section className="h-screen relative flex items-center justify-center">
+      <section
+        id="blog-posts-section"
+        className="h-screen relative flex items-center justify-center"
+      >
         <div className="max-w-6xl mx-auto px-6 w-full max-h-full overflow-y-auto">
           {loading && (
             <div className="text-center text-warm-white/80 py-20">

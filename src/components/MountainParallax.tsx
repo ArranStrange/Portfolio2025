@@ -20,37 +20,37 @@ const MountainParallax: React.FC<MountainParallaxProps> = ({
   const mountainLayers: MountainLayer[] = [
     {
       image:
-        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162588/home/portfolio/mountains/Mountain_6.png", // Static background
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754164221/home/portfolio/mountains/Mountain_6.png", // Static background
       zIndex: 1,
       finalOffset: 0,
     },
     {
       image:
-        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162587/home/portfolio/mountains/Mountain_5.png",
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754164219/home/portfolio/mountains/Mountain_5.png",
       zIndex: 2,
       finalOffset: 50,
     },
     {
       image:
-        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162586/home/portfolio/mountains/Mountain_4.png",
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754164217/home/portfolio/mountains/Mountain_3.png",
       zIndex: 3,
       finalOffset: 100,
     },
     {
       image:
-        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162585/home/portfolio/mountains/Mountain_3.png",
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754164218/home/portfolio/mountains/Mountain_4.png",
       zIndex: 4,
       finalOffset: 150,
     },
     {
       image:
-        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162583/home/portfolio/mountains/Mountain_2.png",
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754164215/home/portfolio/mountains/Mountain_2.png",
       zIndex: 5,
       finalOffset: 200,
     },
     {
       image:
-        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162582/home/portfolio/mountains/Mountain_1.png",
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754164214/home/portfolio/mountains/Mountain_1.png",
       zIndex: 6,
       finalOffset: 250,
     },
