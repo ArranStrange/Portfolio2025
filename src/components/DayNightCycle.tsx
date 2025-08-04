@@ -8,8 +8,9 @@ const DayNightCycle: React.FC = () => {
   const sunRotation = useTransform(scrollYProgress, [0, 1], [0, 180]); // Slower rotation
   const moonRotation = useTransform(scrollYProgress, [0, 1], [0, 180]); // Slower rotation
 
-  // Circular motion parameters - path around the entire viewport
-  const radius = Math.min(window.innerWidth, window.innerHeight) * 0.6; // 60% of smaller screen dimension
+  // Elliptical motion parameters - wider horizontally for more x-axis spacing
+  const radiusY = Math.min(window.innerWidth, window.innerHeight) * 0.4; // 40% of smaller screen dimension for Y (reduced to stay visible)
+  const radiusX = window.innerWidth * 0.8; // 80% of screen width for X (much wider)
   const centerX = window.innerWidth / 2;
   const centerY = window.innerHeight / 2;
 
@@ -17,7 +18,7 @@ const DayNightCycle: React.FC = () => {
   const backgroundOpacity = useTransform(
     scrollYProgress,
     [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1],
-    [0, 0, 0.2, 0.4, 0.6, 0.4, 0.2, 0, 0] // Only bright when sun is at top (0.375-0.625)
+    [0, 0, 0.2, 0.4, 0.6, 0.4, 0.2, 0, 0] // Brightest when sun is at top (0.5)
   );
 
   return (
@@ -39,15 +40,15 @@ const DayNightCycle: React.FC = () => {
             scrollYProgress,
             [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1],
             [
-              centerX + radius, // Right
-              centerX + radius * 0.7, // Right-Top
+              centerX + radiusX, // Right
+              centerX + radiusX * 0.7, // Right-Top
               centerX, // Top
-              centerX - radius * 0.7, // Left-Top
-              centerX - radius, // Left
-              centerX - radius * 0.7, // Left-Bottom
+              centerX - radiusX * 0.7, // Left-Top
+              centerX - radiusX, // Left
+              centerX - radiusX * 0.7, // Left-Bottom
               centerX, // Bottom
-              centerX + radius * 0.7, // Right-Bottom
-              centerX + radius, // Right (back to start)
+              centerX + radiusX * 0.7, // Right-Bottom
+              centerX + radiusX, // Right (back to start)
             ]
           ),
           y: useTransform(
@@ -55,13 +56,13 @@ const DayNightCycle: React.FC = () => {
             [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1],
             [
               centerY, // Right
-              centerY - radius * 0.7, // Right-Top
-              centerY - radius, // Top
-              centerY - radius * 0.7, // Left-Top
+              centerY - radiusY * 0.7, // Right-Top
+              centerY - radiusY, // Top
+              centerY - radiusY * 0.7, // Left-Top
               centerY, // Left
-              centerY + radius * 0.7, // Left-Bottom
-              centerY + radius, // Bottom
-              centerY + radius * 0.7, // Right-Bottom
+              centerY + radiusY * 0.7, // Left-Bottom
+              centerY + radiusY, // Bottom
+              centerY + radiusY * 0.7, // Right-Bottom
               centerY, // Right (back to start)
             ]
           ),
@@ -92,15 +93,15 @@ const DayNightCycle: React.FC = () => {
             scrollYProgress,
             [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1],
             [
-              centerX - radius, // Left (opposite to sun)
-              centerX - radius * 0.7, // Left-Bottom (opposite to sun)
+              centerX - radiusX, // Left (opposite to sun)
+              centerX - radiusX * 0.7, // Left-Bottom (opposite to sun)
               centerX, // Bottom (opposite to sun)
-              centerX + radius * 0.7, // Right-Bottom (opposite to sun)
-              centerX + radius, // Right (opposite to sun)
-              centerX + radius * 0.7, // Right-Top (opposite to sun)
+              centerX + radiusX * 0.7, // Right-Bottom (opposite to sun)
+              centerX + radiusX, // Right (opposite to sun)
+              centerX + radiusX * 0.7, // Right-Top (opposite to sun)
               centerX, // Top (opposite to sun)
-              centerX - radius * 0.7, // Left-Top (opposite to sun)
-              centerX - radius, // Left (back to start)
+              centerX - radiusX * 0.7, // Left-Top (opposite to sun)
+              centerX - radiusX, // Left (back to start)
             ]
           ),
           y: useTransform(
@@ -108,13 +109,13 @@ const DayNightCycle: React.FC = () => {
             [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1],
             [
               centerY, // Left
-              centerY + radius * 0.7, // Left-Bottom
-              centerY + radius, // Bottom
-              centerY + radius * 0.7, // Right-Bottom
+              centerY + radiusY * 0.7, // Left-Bottom
+              centerY + radiusY, // Bottom
+              centerY + radiusY * 0.7, // Right-Bottom
               centerY, // Right
-              centerY - radius * 0.7, // Right-Top
-              centerY - radius, // Top
-              centerY - radius * 0.7, // Left-Top
+              centerY - radiusY * 0.7, // Right-Top
+              centerY - radiusY, // Top
+              centerY - radiusY * 0.7, // Left-Top
               centerY, // Left (back to start)
             ]
           ),

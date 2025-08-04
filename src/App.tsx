@@ -10,6 +10,7 @@ import Lenis from "lenis";
 import Hero from "./components/Hero";
 import ProjectsPage from "./pages/ProjectsPage";
 import AboutPage from "./pages/AboutPage";
+import GitHubPage from "./pages/GitHubPage";
 import ContactPage from "./pages/ContactPage";
 import Navigation from "./components/Navigation";
 import BlogPage from "./pages/BlogPage";
@@ -79,6 +80,7 @@ function App() {
             <Route path="/" element={<Hero />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/github" element={<GitHubPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/contact" element={<ContactPage />} />
           </Routes>
