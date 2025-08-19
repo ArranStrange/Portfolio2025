@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import WaveParallax from "../components/WaveParallax";
 import BlogCard from "../components/BlogCard";
+import SEO from "../components/SEO";
 
 interface BlogPost {
   id: number;
@@ -45,7 +46,14 @@ const BlogPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative">
+    <>
+      <SEO 
+        title="Blog"
+        description="Thoughts on web development, design, and creative technology. Exploring the intersection of code and creativity."
+        keywords="blog, web development, design, creative technology, React, TypeScript, development notes"
+        type="website"
+      />
+      <div className="relative">
       {/* Wave Parallax Section */}
       <section className="h-screen relative">
         <WaveParallax onAnimationComplete={handleWaveAnimationComplete} />
@@ -128,6 +136,7 @@ const BlogPage: React.FC = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

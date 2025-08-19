@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Card from "../components/Card";
+import SEO from "../components/SEO";
 
 interface GitHubRepo {
   id: number;
@@ -82,7 +83,14 @@ const GitHubPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <>
+      <SEO 
+        title="GitHub"
+        description="Explore my open-source projects and contributions on GitHub. View my latest repositories and code samples."
+        keywords="GitHub, open source, repositories, code, projects, development, React, TypeScript"
+        type="website"
+      />
+      <div className="min-h-screen">
       <div className="container mx-auto px-6 py-20">
         {/* Header */}
         <motion.div
@@ -214,6 +222,7 @@ const GitHubPage: React.FC = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

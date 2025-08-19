@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import MountainParallax from "./MountainParallax";
 import IntroText from "./IntroText";
 import DayNightCycle from "./DayNightCycle";
+import SEO from "./SEO";
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -30,13 +31,20 @@ const Hero = () => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      className="relative z-10"
-    >
+    <>
+      <SEO 
+        title="Home"
+        description="Indie web developer with a background in design and hospitality, crafting original, beautiful applications. Currently designing VISOR — a platform for film sims and presets."
+        keywords="full-stack developer, web designer, React, TypeScript, Cardiff, UK, VISOR, film sims, web applications"
+        type="website"
+      />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5 }}
+        className="relative z-10"
+      >
       {/* Mountain Parallax Section */}
       <section className="h-screen relative">
         <MountainParallax
@@ -111,6 +119,7 @@ const Hero = () => {
         </AnimatePresence>
       </section>
     </motion.div>
+    </>
   );
 };
 

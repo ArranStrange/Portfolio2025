@@ -55,23 +55,24 @@ const About = () => {
           >
             <div className="space-y-6">
               <p className="body-text text-balance leading-relaxed">
-                I grew up in the countryside, where patience and attention to
-                detail weren't just virtues—they were necessities. That same
-                mindset carried me through managing a street food market, where
-                every detail mattered to the customer experience.
+                With a focus on web design and front-end development, I
+                specialise in creating dynamic, visually compelling digital
+                experiences.
+              </p>
+
+              <p className="align-end body-text text-balance leading-relaxed">
+                My work combines innovative design, smooth animations, and
+                intuitive functionality to bring ideas to life on the web.
               </p>
 
               <p className="body-text text-balance leading-relaxed">
-                Late nights, naptimes, and tutorials got me into code. When my
-                daughter was born, I found myself with pockets of time—sometimes
-                just 20 minutes— to learn something new. Those moments became my
-                foundation in web development.
-              </p>
-
-              <p className="body-text text-balance leading-relaxed">
-                Now I bring that same resilience and calm to software. I build
-                tools that feel thoughtful and purposeful, because good software
-                should make people's lives easier, not more complicated.
+                My goal is to design exceptional user experiences for visually
+                stunning applications. I am passionate about minimalism, clean
+                user interfaces, and impactful typography. My focus is on
+                delivering seamless functionality that enables engaging and
+                intuitive user journeys. I specialise in creating applications
+                that blend design and engineering seamlessly—products that are
+                both visually impressive and well-built at their core.
               </p>
             </div>
           </motion.div>

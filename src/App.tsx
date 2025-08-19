@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { motion } from "framer-motion";
 import Lenis from "lenis";
+import { HelmetProvider } from "react-helmet-async";
 import Hero from "./components/Hero";
 import ProjectsPage from "./pages/ProjectsPage";
 import AboutPage from "./pages/AboutPage";
@@ -19,6 +20,7 @@ import StarField from "./components/StarField";
 import VHSGrainOverlay from "./components/VHSGrainOverlay";
 import DayNightCycle from "./components/DayNightCycle";
 import LoadingScreen from "./components/LoadingScreen";
+import Analytics from "./components/Analytics";
 import { usePerformance } from "./hooks/usePerformance";
 import { useLoading } from "./hooks/useLoading";
 
@@ -125,41 +127,44 @@ function App() {
 
       {/* Main App Content */}
       {loadingComplete && (
-        <Router>
-          <div className="relative min-h-screen">
-            <ScrollToTop
-              startTransition={startTransition}
-              endTransition={endTransition}
-            />
+        <HelmetProvider>
+          <Router>
+            <div className="relative min-h-screen">
+              <ScrollToTop
+                startTransition={startTransition}
+                endTransition={endTransition}
+              />
 
-            {/* Conditionally render day/night cycle */}
-            {dayNightSettings.enabled && <DayNightCycle />}
+              {/* Conditionally render day/night cycle */}
+              {dayNightSettings.enabled && <DayNightCycle />}
 
-            {/* Conditionally render shooting stars */}
-            {shootingStarsSettings.enabled && <ShootingStars />}
+              {/* Conditionally render shooting stars */}
+              {shootingStarsSettings.enabled && <ShootingStars />}
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: loadingComplete ? 1 : 0 }}
-              transition={{
-                duration: settings.reducedMotion ? 0.3 : 0.5,
-                ease: settings.reducedMotion ? "easeOut" : "easeInOut",
-                delay: loadingComplete ? 0.1 : 0, // Small delay to ensure loading is gone
-              }}
-              className="relative z-10"
-            >
-              <Navigation />
-              <Routes>
-                <Route path="/" element={<Hero />} />
-                <Route path="/projects" element={<ProjectsPage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/github" element={<GitHubPage />} />
-                <Route path="/blog" element={<BlogPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-              </Routes>
-            </motion.div>
-          </div>
-        </Router>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: loadingComplete ? 1 : 0 }}
+                transition={{
+                  duration: settings.reducedMotion ? 0.3 : 0.5,
+                  ease: settings.reducedMotion ? "easeOut" : "easeInOut",
+                  delay: loadingComplete ? 0.1 : 0, // Small delay to ensure loading is gone
+                }}
+                className="relative z-10"
+              >
+                <Navigation />
+                <Analytics />
+                <Routes>
+                  <Route path="/" element={<Hero />} />
+                  <Route path="/projects" element={<ProjectsPage />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/github" element={<GitHubPage />} />
+                  <Route path="/blog" element={<BlogPage />} />
+                  <Route path="/contact" element={<ContactPage />} />
+                </Routes>
+              </motion.div>
+            </div>
+          </Router>
+        </HelmetProvider>
       )}
     </>
   );

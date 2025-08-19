@@ -271,3 +271,402 @@ commit create a pull request and merge, don't delete the branch
 
 ---
 
+_**Assistant**_
+
+I'll help you commit the changes, create a pull request, and merge it without deleting the branch. Let me do this step by step.
+
+
+---
+
+```bash
+git status
+```
+
+```
+
+On branch projects-update
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   .specstory/history/2025-08-19_12-11Z-replace-placeholders-wi
+th-cloudinary-images.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+---
+
+I see there's a modified file in the `.specstory/history` directory. Let me check what changes are in the Projects.tsx file:
+
+
+---
+
+```bash
+git diff src/components/Projects.tsx
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % git diff src/components/Projects.tsx
+```
+
+---
+
+It seems the changes to Projects.tsx are already committed. Let me check the git log to see the current state:
+
+
+---
+
+```bash
+git log --oneline -5
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % git log --oneline -5
+29be561 (HEAD -> projects-update, origin/projects-update) docs: update specstory history
+fb70321 feat: replace placeholder images with Cloudinary project icons and update project links
+cd67596 Merge pull request #7 from ArranStrange/loading
+7f3a91a (origin/loading, loading) feat: add loading screen with page transitions
+f5a5f83 Merge pull request #6 from ArranStrange/pebbles-update
+```
+
+---
+
+Great! I can see that the changes are already committed. The commit "feat: replace placeholder images with Cloudinary project icons and update project links" shows that the work has been done. Now let me check if we're on the right branch and push the changes:
+
+
+---
+
+```bash
+git branch
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % git branch
+  Cloudinary
+  Shooting-stars
+  day-and-night
+  feature-branch
+  loading
+  main
+  optimising-images
+  pebbles-update
+* projects-update
+```
+
+---
+
+Perfect! We're on the `projects-update` branch. Now let me push the changes to the remote repository:
+
+
+---
+
+```bash
+git push origin projects-update
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % git push origin projects-update
+Everything up-to-date
+```
+
+---
+
+The branch is already up to date. Now let me check if there's a pull request already created or if we need to create one. Let me also check the remote repository status:
+
+
+---
+
+```bash
+git remote -v
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % git remote -v
+origin  https://github.com/ArranStrange/Portfolio2025.git (fetch)
+origin  https://github.com/ArranStrange/Portfolio2025.git (push)
+```
+
+---
+
+Now let me check if there are any differences between our branch and main:
+
+
+---
+
+```bash
+git diff main..projects-update
+```
+
+```
+
+diff --git a/.specstory/history/2025-08-19_12-11Z-replace-placeholders-with-cloudinary-images.md b/.specstor
+y/history/2025-08-19_12-11Z-replace-placeholders-with-cloudinary-images.md
+
+index 3828ed4..f5f74f9 100644
+--- a/.specstory/history/2025-08-19_12-11Z-replace-placeholders-with-cloudinary-images.md
++++ b/.specstory/history/2025-08-19_12-11Z-replace-placeholders-with-cloudinary-images.md
+@@ -265,3 +265,53 @@ The images will now be displayed in the project preview section instead of the g
+ 
+ ---
+ 
++_**User**_
++
++commit create a pull request and merge, don't delete the branch
++
++---
++
++_**Assistant**_
++
++I'll help you commit the changes, create a pull request, and merge it without deleting the branch. Let me s
+tart by checking the current git status and then proceed with the workflow.
+
++
++
++---
++
++```bash
++cd "/Users/arranstrange/Documents/Coding/Portfolio 2" && git status
++```
++
++```
++
++On branch projects-update
++Changes not staged for commit:
++  (use "git add <file>..." to update what will be committed)
++  (use "git restore <file>..." to discard changes in working directory)
++        modified:   .specstory/history/2025-08-19_11-50Z-create-a-loading-screen
++-with-sticks.md
++        modified:   src/components/Projects.tsx
++
++Untracked files:
++  (use "git add <file>..." to include in what will be committed)
++        .specstory/history/2025-08-19_12-11Z-replace-placeholders-with-cloudinar
++y-images.md
++
++no changes added to commit (use "git add" and/or "git commit -a")
++```
++
++---
++
++Great! I can see we're on the `projects-update` branch and there are changes to commit. Let me add the chan
+ges and commit them:
+
++
++
++---
++
++
++
++---
++
++
++
++---
++
+```
+
+---
+
+I can see there are differences between the branches. Let me check the current status and see what needs to be committed:
+
+
+---
+
+```bash
+git status
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % git status
+On branch projects-update
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   .specstory/history/2025-08-19_12-11Z-replace-placeholders-with-cloudinary-images.md
+        deleted:    public/vite.svg
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        public/favicon.ico
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+---
+
+I see there are some additional changes. Let me add and commit these changes:
+
+
+---
+
+```bash
+git add .
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % git add .
+```
+
+---
+
+```bash
+git commit -m "chore: update project assets and documentation"
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % git commit -m "chore: update project assets and documentation"
+[projects-update d0b0e37] chore: update project assets and documentation
+ 3 files changed, 45 deletions(-)
+ create mode 100644 public/favicon.ico
+ delete mode 100644 public/vite.svg
+```
+
+---
+
+Now let me push the updated branch:
+
+
+---
+
+```bash
+git push origin projects-update
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % git push origin projects-update
+Enumerating objects: 12, done.
+Counting objects: 100% (12/12), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (7/7), done.
+Writing objects: 100% (7/7), 4.90 KiB | 2.45 MiB/s, done.
+Total 7 (delta 4), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (4/4), completed with 4 local objects.
+To https://github.com/ArranStrange/Portfolio2025.git
+   29be561..d0b0e37  projects-update -> projects-update
+```
+
+---
+
+Great! Now let me create a pull request. I'll use the GitHub CLI if it's available, or provide instructions for creating it manually:
+
+
+---
+
+```bash
+gh --version
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % gh --version
+gh version 2.74.0 (2025-05-29)
+https://github.com/cli/cli/releases/tag/v2.74.0
+```
+
+---
+
+Perfect! GitHub CLI is available. Let me create a pull request:
+
+
+---
+
+```bash
+gh pr create --title "feat: replace placeholder images with Cloudinary project icons and update project links" --body "This PR updates the Projects component to use Cloudinary-hosted project icons instead of placeholder images. It also updates project links and tech stacks for better accuracy.
+
+## Changes:
+- Replace placeholder images with Cloudinary URLs for VISOR, Sticky Fingers, Black Book, and Weather App projects
+- Update project links to point to actual deployed applications
+- Enhance tech stacks with more detailed technology information
+- Add fallback to mountain silhouette for projects without images (Run Tracker)
+- Update project assets (favicon, remove vite.svg)
+
+## Projects Updated:
+- VISOR: Photography tool with film simulations
+- Sticky Fingers: Street food market website  
+- Black Book: Drinks library with dark UI
+- Weather App: Minimal weather interface
+- Run Tracker: Fitness app (kept placeholder)" --base main
+```
+
+```
+<Tracker: Fitness app (kept placeholder)" --base main
+
+Creating pull request for projects-update into main in ArranStrange/Portfolio2025
+
+https://github.com/ArranStrange/Portfolio2025/pull/9
+```
+
+---
+
+Excellent! The pull request has been created successfully. Now let me merge it:
+
+
+---
+
+```bash
+gh pr merge 9 --merge --delete-branch=false
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % gh pr merge 9 --merge --delete-branch=false
+✓ Merged pull request ArranStrange/Portfolio2025#9 (feat: replace placeholder images with Cloudinary project
+ icons and update project links)
+arranstrange@MacBook-Pro-2 Portfolio 2 %
+```
+
+---
+
+Perfect! Let me verify the merge was successful and check the current status:
+
+
+---
+
+```bash
+git status
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % git status
+On branch projects-update
+nothing to commit, working tree clean
+```
+
+---
+
+```bash
+git log --oneline -3
+```
+
+```
+arranstrange@MacBook-Pro-2 Portfolio 2 % git log --oneline -3
+d0b0e37 (HEAD -> projects-update, origin/projects-update) chore: update project assets and documentation
+29be561 docs: update specstory history
+fb70321 feat: replace placeholder images with Cloudinary project icons and update project links
+```
+
+---
+
+Excellent! I've successfully completed all the requested tasks:
+
+## ✅ Completed Tasks:
+
+1. **✅ Committed Changes**: All changes have been committed to the `projects-update` branch
+2. **✅ Created Pull Request**: Created PR #9 with a detailed description of the changes
+3. **✅ Merged Pull Request**: Successfully merged the PR into the main branch
+4. **✅ Preserved Branch**: The `projects-update` branch was kept as requested (not deleted)
+
+## �� Summary of Changes Merged:
+
+- **Updated Project Images**: Replaced placeholder images with Cloudinary URLs for:
+  - VISOR: `https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162615/home/portfolio/icons/VISOR.png`
+  - Sticky Fingers: `https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162614/home/portfolio/icons/Sticky_Fingers.png`
+  - Black Book: `https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162613/home/portfolio/icons/Black_Book.png`
+  - Weather App: `https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162616/home/portfolio/icons/Weather_App.png`
+
+- **Enhanced Project Information**: Updated tech stacks and added actual project links
+- **Improved Image Display**: Added logic to show actual project images with fallback to mountain silhouette
+- **Updated Assets**: Added favicon and cleaned up project assets
+
+The pull request has been successfully merged and the `projects-update` branch is still available for future work. You can view the merged PR at: https://github.com/ArranStrange/Portfolio2025/pull/9
+
+---
+
