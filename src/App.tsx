@@ -10,6 +10,7 @@ import Lenis from "lenis";
 import Hero from "./components/Hero";
 import ProjectsPage from "./pages/ProjectsPage";
 import AboutPage from "./pages/AboutPage";
+import GitHubPage from "./pages/GitHubPage";
 import ContactPage from "./pages/ContactPage";
 import Navigation from "./components/Navigation";
 import BlogPage from "./pages/BlogPage";
@@ -17,6 +18,14 @@ import ShootingStars from "./components/ShootingStars";
 import StarField from "./components/StarField";
 import VHSGrainOverlay from "./components/VHSGrainOverlay";
 import DayNightCycle from "./components/DayNightCycle";
+import { usePerformance } from "./hooks/usePerformance";
+
+// Extend Window interface to include Lenis
+declare global {
+  interface Window {
+    lenis?: Lenis;
+  }
+}
 
 // Component to handle scroll to top on route changes
 function ScrollToTop() {
@@ -27,8 +36,8 @@ function ScrollToTop() {
     window.scrollTo(0, 0);
 
     // If Lenis is available, use it for smooth scrolling
-    if ((window as any).lenis) {
-      (window as any).lenis.scrollTo(0, { immediate: true });
+    if (window.lenis) {
+      window.lenis.scrollTo(0, { immediate: true });
     }
   }, [pathname]);
 
@@ -36,15 +45,19 @@ function ScrollToTop() {
 }
 
 function App() {
+  const { settings, getComponentSettings } = usePerformance();
+
   useEffect(() => {
-    // Initialize Lenis for smooth scrolling
+    // Initialize Lenis for smooth scrolling with optimized settings
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: settings.reducedMotion ? 0.8 : 1.2, // Faster for reduced motion
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: settings.reducedMotion ? 0.6 : 0.8, // Less sensitive for reduced motion
     });
 
     // Make Lenis available globally for other components
-    (window as any).lenis = lenis;
+    window.lenis = lenis;
 
     function raf(time: number) {
       lenis.raf(time);
@@ -55,23 +68,45 @@ function App() {
 
     return () => {
       lenis.destroy();
-      delete (window as any).lenis;
+      delete window.lenis;
     };
-  }, []);
+  }, [settings.reducedMotion]);
+
+  // Get component-specific settings
+  const starFieldSettings = getComponentSettings("StarField");
+  const vhsSettings = getComponentSettings("VHSGrainOverlay");
+  const shootingStarsSettings = getComponentSettings("ShootingStars");
+  const dayNightSettings = getComponentSettings("DayNightCycle");
 
   return (
     <Router>
       <div className="relative min-h-screen">
         <ScrollToTop />
-        <VHSGrainOverlay intensity={1} speed={0.8} />
-        <DayNightCycle />
-        <ShootingStars />
-        <StarField starCount={750} />
+
+        {/* Conditionally render VHS grain overlay */}
+        {vhsSettings.enabled && (
+          <VHSGrainOverlay
+            intensity={vhsSettings.intensity}
+            speed={vhsSettings.speed}
+          />
+        )}
+
+        {/* Conditionally render day/night cycle */}
+        {dayNightSettings.enabled && <DayNightCycle />}
+
+        {/* Conditionally render shooting stars */}
+        {shootingStarsSettings.enabled && <ShootingStars />}
+
+        {/* StarField with optimized settings */}
+        <StarField starCount={starFieldSettings.starCount} />
 
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{
+            duration: settings.reducedMotion ? 0.3 : 0.5,
+            ease: settings.reducedMotion ? "easeOut" : "easeInOut",
+          }}
           className="relative z-10"
         >
           <Navigation />
@@ -79,6 +114,7 @@ function App() {
             <Route path="/" element={<Hero />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/github" element={<GitHubPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/contact" element={<ContactPage />} />
           </Routes>

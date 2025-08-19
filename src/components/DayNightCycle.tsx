@@ -4,20 +4,47 @@ import { motion, useScroll, useTransform } from "framer-motion";
 const DayNightCycle: React.FC = () => {
   const { scrollYProgress } = useScroll();
 
-  // Transform scroll progress to rotation and position
-  const sunRotation = useTransform(scrollYProgress, [0, 1], [0, 180]); // Slower rotation
-  const moonRotation = useTransform(scrollYProgress, [0, 1], [0, 180]); // Slower rotation
+  // Simplified transforms with fewer keyframes for better performance
+  const sunRotation = useTransform(scrollYProgress, [0, 1], [0, 180]);
+  const moonRotation = useTransform(scrollYProgress, [0, 1], [0, 180]);
 
-  // Circular motion parameters - path around the entire viewport
-  const radius = Math.min(window.innerWidth, window.innerHeight) * 0.6; // 60% of smaller screen dimension
+  // Optimized elliptical motion parameters
+  const radiusY = Math.min(window.innerWidth, window.innerHeight) * 0.35; // Reduced from 0.4
+  const radiusX = window.innerWidth * 0.7; // Reduced from 0.8
   const centerX = window.innerWidth / 2;
   const centerY = window.innerHeight / 2;
 
-  // Background opacity based on sun position in top half of screen
+  // Simplified background opacity with fewer keyframes
   const backgroundOpacity = useTransform(
     scrollYProgress,
-    [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1],
-    [0, 0, 0.2, 0.4, 0.6, 0.4, 0.2, 0, 0] // Only bright when sun is at top (0.375-0.625)
+    [0, 0.25, 0.5, 0.75, 1],
+    [0, 0.3, 0.6, 0.3, 0]
+  );
+
+  // Simplified sun position with fewer keyframes
+  const sunX = useTransform(
+    scrollYProgress,
+    [0, 0.25, 0.5, 0.75, 1],
+    [centerX + radiusX, centerX, centerX - radiusX, centerX, centerX + radiusX]
+  );
+
+  const sunY = useTransform(
+    scrollYProgress,
+    [0, 0.25, 0.5, 0.75, 1],
+    [centerY, centerY - radiusY, centerY, centerY + radiusY, centerY]
+  );
+
+  // Simplified moon position (opposite to sun)
+  const moonX = useTransform(
+    scrollYProgress,
+    [0, 0.25, 0.5, 0.75, 1],
+    [centerX - radiusX, centerX, centerX + radiusX, centerX, centerX - radiusX]
+  );
+
+  const moonY = useTransform(
+    scrollYProgress,
+    [0, 0.25, 0.5, 0.75, 1],
+    [centerY, centerY + radiusY, centerY, centerY - radiusY, centerY]
   );
 
   return (
@@ -35,36 +62,8 @@ const DayNightCycle: React.FC = () => {
       <motion.div
         className="fixed pointer-events-none z-10"
         style={{
-          x: useTransform(
-            scrollYProgress,
-            [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1],
-            [
-              centerX + radius, // Right
-              centerX + radius * 0.7, // Right-Top
-              centerX, // Top
-              centerX - radius * 0.7, // Left-Top
-              centerX - radius, // Left
-              centerX - radius * 0.7, // Left-Bottom
-              centerX, // Bottom
-              centerX + radius * 0.7, // Right-Bottom
-              centerX + radius, // Right (back to start)
-            ]
-          ),
-          y: useTransform(
-            scrollYProgress,
-            [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1],
-            [
-              centerY, // Right
-              centerY - radius * 0.7, // Right-Top
-              centerY - radius, // Top
-              centerY - radius * 0.7, // Left-Top
-              centerY, // Left
-              centerY + radius * 0.7, // Left-Bottom
-              centerY + radius, // Bottom
-              centerY + radius * 0.7, // Right-Bottom
-              centerY, // Right (back to start)
-            ]
-          ),
+          x: sunX,
+          y: sunY,
           rotate: sunRotation,
         }}
       >
@@ -73,11 +72,11 @@ const DayNightCycle: React.FC = () => {
           alt="Sun"
           className="w-12 h-12 md:w-16 md:h-16 opacity-80 blur-sm"
           animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.8, 1, 0.8],
+            scale: [1, 1.05, 1], // Reduced scale animation
+            opacity: [0.8, 0.9, 0.8], // Reduced opacity animation
           }}
           transition={{
-            duration: 3,
+            duration: 4, // Increased duration for smoother animation
             repeat: Infinity,
             ease: "easeInOut",
           }}
@@ -88,36 +87,8 @@ const DayNightCycle: React.FC = () => {
       <motion.div
         className="fixed pointer-events-none z-10"
         style={{
-          x: useTransform(
-            scrollYProgress,
-            [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1],
-            [
-              centerX - radius, // Left (opposite to sun)
-              centerX - radius * 0.7, // Left-Bottom (opposite to sun)
-              centerX, // Bottom (opposite to sun)
-              centerX + radius * 0.7, // Right-Bottom (opposite to sun)
-              centerX + radius, // Right (opposite to sun)
-              centerX + radius * 0.7, // Right-Top (opposite to sun)
-              centerX, // Top (opposite to sun)
-              centerX - radius * 0.7, // Left-Top (opposite to sun)
-              centerX - radius, // Left (back to start)
-            ]
-          ),
-          y: useTransform(
-            scrollYProgress,
-            [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1],
-            [
-              centerY, // Left
-              centerY + radius * 0.7, // Left-Bottom
-              centerY + radius, // Bottom
-              centerY + radius * 0.7, // Right-Bottom
-              centerY, // Right
-              centerY - radius * 0.7, // Right-Top
-              centerY - radius, // Top
-              centerY - radius * 0.7, // Left-Top
-              centerY, // Left (back to start)
-            ]
-          ),
+          x: moonX,
+          y: moonY,
           rotate: moonRotation,
         }}
       >
@@ -126,11 +97,11 @@ const DayNightCycle: React.FC = () => {
           alt="Moon"
           className="w-12 h-12 md:w-16 md:h-16 opacity-80 blur-sm"
           animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.8, 1, 0.8],
+            scale: [1, 1.05, 1], // Reduced scale animation
+            opacity: [0.8, 0.9, 0.8], // Reduced opacity animation
           }}
           transition={{
-            duration: 4,
+            duration: 5, // Increased duration for smoother animation
             repeat: Infinity,
             ease: "easeInOut",
             delay: 1,
