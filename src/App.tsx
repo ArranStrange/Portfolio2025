@@ -18,7 +18,9 @@ import ShootingStars from "./components/ShootingStars";
 import StarField from "./components/StarField";
 import VHSGrainOverlay from "./components/VHSGrainOverlay";
 import DayNightCycle from "./components/DayNightCycle";
+import LoadingScreen from "./components/LoadingScreen";
 import { usePerformance } from "./hooks/usePerformance";
+import { useLoading } from "./hooks/useLoading";
 
 // Extend Window interface to include Lenis
 declare global {
@@ -28,24 +30,47 @@ declare global {
 }
 
 // Component to handle scroll to top on route changes
-function ScrollToTop() {
+function ScrollToTop({
+  startTransition,
+  endTransition,
+}: {
+  startTransition: () => void;
+  endTransition: () => void;
+}) {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // Scroll to top when pathname changes
-    window.scrollTo(0, 0);
+    // Start transition when route changes
+    startTransition();
 
-    // If Lenis is available, use it for smooth scrolling
-    if (window.lenis) {
-      window.lenis.scrollTo(0, { immediate: true });
-    }
-  }, [pathname]);
+    // Small delay to ensure transition starts before scroll
+    setTimeout(() => {
+      // Scroll to top when pathname changes
+      window.scrollTo(0, 0);
+
+      // If Lenis is available, use it for smooth scrolling
+      if (window.lenis) {
+        window.lenis.scrollTo(0, { immediate: true });
+      }
+
+      // End transition after scroll
+      endTransition();
+    }, 100);
+  }, [pathname, startTransition, endTransition]);
 
   return null;
 }
 
 function App() {
   const { settings, getComponentSettings } = usePerformance();
+  const {
+    isLoading,
+    isTransitioning,
+    loadingComplete,
+    handleLoadingComplete,
+    startTransition,
+    endTransition,
+  } = useLoading();
 
   useEffect(() => {
     // Initialize Lenis for smooth scrolling with optimized settings
@@ -79,48 +104,64 @@ function App() {
   const dayNightSettings = getComponentSettings("DayNightCycle");
 
   return (
-    <Router>
-      <div className="relative min-h-screen">
-        <ScrollToTop />
+    <>
+      {/* StarField - Always visible */}
+      <StarField starCount={starFieldSettings.starCount} />
 
-        {/* Conditionally render VHS grain overlay */}
-        {vhsSettings.enabled && (
-          <VHSGrainOverlay
-            intensity={vhsSettings.intensity}
-            speed={vhsSettings.speed}
-          />
-        )}
+      {/* VHS grain overlay - Always visible */}
+      {vhsSettings.enabled && (
+        <VHSGrainOverlay
+          intensity={vhsSettings.intensity}
+          speed={vhsSettings.speed}
+        />
+      )}
 
-        {/* Conditionally render day/night cycle */}
-        {dayNightSettings.enabled && <DayNightCycle />}
+      {/* Loading Screen */}
+      <LoadingScreen
+        isLoading={isLoading}
+        onLoadingComplete={handleLoadingComplete}
+        isTransitioning={isTransitioning}
+      />
 
-        {/* Conditionally render shooting stars */}
-        {shootingStarsSettings.enabled && <ShootingStars />}
+      {/* Main App Content */}
+      {loadingComplete && (
+        <Router>
+          <div className="relative min-h-screen">
+            <ScrollToTop
+              startTransition={startTransition}
+              endTransition={endTransition}
+            />
 
-        {/* StarField with optimized settings */}
-        <StarField starCount={starFieldSettings.starCount} />
+            {/* Conditionally render day/night cycle */}
+            {dayNightSettings.enabled && <DayNightCycle />}
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{
-            duration: settings.reducedMotion ? 0.3 : 0.5,
-            ease: settings.reducedMotion ? "easeOut" : "easeInOut",
-          }}
-          className="relative z-10"
-        >
-          <Navigation />
-          <Routes>
-            <Route path="/" element={<Hero />} />
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/github" element={<GitHubPage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-          </Routes>
-        </motion.div>
-      </div>
-    </Router>
+            {/* Conditionally render shooting stars */}
+            {shootingStarsSettings.enabled && <ShootingStars />}
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: loadingComplete ? 1 : 0 }}
+              transition={{
+                duration: settings.reducedMotion ? 0.3 : 0.5,
+                ease: settings.reducedMotion ? "easeOut" : "easeInOut",
+                delay: loadingComplete ? 0.1 : 0, // Small delay to ensure loading is gone
+              }}
+              className="relative z-10"
+            >
+              <Navigation />
+              <Routes>
+                <Route path="/" element={<Hero />} />
+                <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/github" element={<GitHubPage />} />
+                <Route path="/blog" element={<BlogPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+              </Routes>
+            </motion.div>
+          </div>
+        </Router>
+      )}
+    </>
   );
 }
 
