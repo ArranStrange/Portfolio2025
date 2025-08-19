@@ -10,15 +10,32 @@ const Projects = () => {
       id: 1,
       title: "VISOR",
       description: "Photography tool for film simulations and presets",
-      stack: ["React", "TypeScript", "Node.js"],
-      image: "/placeholder-visor.jpg",
-      link: "#",
+      stack: [
+        "React",
+        "TypeScript",
+        "Node.js",
+        "GraphQL",
+        "MongoDB",
+        "Framer Motion",
+        "Firebase",
+      ],
+      image:
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162615/home/portfolio/icons/VISOR.png",
+      link: "https://visor-c51a1.web.app/",
     },
     {
       id: 2,
       title: "Run Tracker",
       description: "Fitness app with ghost run feature",
-      stack: ["React Native", "Firebase", "Maps API"],
+      stack: [
+        "React Native",
+        "TypeScript",
+        "Firebase",
+        "Maps API",
+        "Geolocation",
+        "MongoDB",
+        "GraphQL",
+      ],
       image: "/placeholder-run.jpg",
       link: "#",
     },
@@ -26,25 +43,34 @@ const Projects = () => {
       id: 3,
       title: "Black Book",
       description: "Clean dark UI drinks library with filters",
-      stack: ["React", "Tailwind", "Cocktail API"],
-      image: "/placeholder-drinks.jpg",
-      link: "#",
+      stack: [
+        "React",
+        "TypeScript",
+        "Custom Rest API",
+        "Material UI",
+        "Firebase",
+      ],
+      image:
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162613/home/portfolio/icons/Black_Book.png",
+      link: "https://black-book-1454c.web.app/",
     },
     {
       id: 4,
       title: "Weather App",
       description: "Minimal weather interface with location tracking",
-      stack: ["React", "OpenWeather API", "Geolocation"],
-      image: "/placeholder-weather.jpg",
-      link: "#",
+      stack: ["React", "TypeScript", "OpenWeather API", "Geolocation"],
+      image:
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162616/home/portfolio/icons/Weather_App.png",
+      link: "https://arranstrange.github.io/weather-api-app/",
     },
     {
       id: 5,
       title: "Sticky Fingers",
       description: "Street food market website",
-      stack: ["WordPress", "Custom Theme", "WooCommerce"],
-      image: "/placeholder-food.jpg",
-      link: "#",
+      stack: ["React", "TypeScript", "Pure CSS", "Framer Motion", "Firebase"],
+      image:
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162614/home/portfolio/icons/Sticky_Fingers.png",
+      link: "https://sticky-fingers-c4170.web.app/",
     },
   ];
 
@@ -78,32 +104,41 @@ const Projects = () => {
             {/* Preview Section */}
             <div className="mb-6 md:mb-8">
               <div className="aspect-video border border-warm-white/20 rounded-lg overflow-hidden relative">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-warm-white/60 font-satoshi text-sm md:text-lg mb-2 md:mb-4">
-                      {currentProject.title} Preview
-                    </div>
-                    {/* Mountain silhouette */}
-                    <div className="w-20 h-10 md:w-32 md:h-16 mx-auto">
-                      <svg
-                        viewBox="0 0 128 64"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M0 64L20 40L40 50L60 30L80 45L100 25L128 45V64H0Z"
-                          fill="#374151"
-                          opacity="0.6"
-                        />
-                        <path
-                          d="M10 64L25 45L40 55L60 35L80 50L100 30L118 50V64H10Z"
-                          fill="#4B5563"
-                          opacity="0.4"
-                        />
-                      </svg>
+                {currentProject.image &&
+                currentProject.image.startsWith("http") ? (
+                  <img
+                    src={currentProject.image}
+                    alt={`${currentProject.title} preview`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-warm-white/60 font-satoshi text-sm md:text-lg mb-2 md:mb-4">
+                        {currentProject.title} Preview
+                      </div>
+                      {/* Mountain silhouette */}
+                      <div className="w-20 h-10 md:w-32 md:h-16 mx-auto">
+                        <svg
+                          viewBox="0 0 128 64"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M0 64L20 40L40 50L60 30L80 45L100 25L128 45V64H0Z"
+                            fill="#374151"
+                            opacity="0.6"
+                          />
+                          <path
+                            d="M10 64L25 45L40 55L60 35L80 50L100 30L118 50V64H10Z"
+                            fill="#4B5563"
+                            opacity="0.4"
+                          />
+                        </svg>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
 
@@ -139,7 +174,9 @@ const Projects = () => {
                 {currentProject.stack.map((tech, index) => (
                   <div key={index} className="flex items-center">
                     <img
-                      src={`https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162596/home/portfolio/pebbles/Pebble_${(index % 12) + 1}.png`}
+                      src={`https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162596/home/portfolio/pebbles/Pebble_${
+                        (index % 12) + 1
+                      }.png`}
                       alt=""
                       className="w-3 h-3 md:w-4 md:h-4 mr-1.5 md:mr-2 object-contain"
                     />
