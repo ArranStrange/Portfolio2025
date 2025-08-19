@@ -32,7 +32,7 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
   const [isResetting, setIsResetting] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
 
-  // Pebble configurations
+  // Reduced pebble configurations for better performance
   const pebbleImages = [
     "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162596/home/portfolio/pebbles/Pebble_1.png",
     "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162599/home/portfolio/pebbles/Pebble_2.png",
@@ -40,12 +40,6 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162601/home/portfolio/pebbles/Pebble_4.png",
     "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162601/home/portfolio/pebbles/Pebble_5.png",
     "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162602/home/portfolio/pebbles/Pebble_6.png",
-    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162603/home/portfolio/pebbles/Pebble_7.png",
-    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162603/home/portfolio/pebbles/Pebble_8.png",
-    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162604/home/portfolio/pebbles/Pebble_9.png",
-    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162597/home/portfolio/pebbles/Pebble_10.png",
-    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162598/home/portfolio/pebbles/Pebble_11.png",
-    "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162598/home/portfolio/pebbles/Pebble_12.png",
   ];
 
   // Preload images
@@ -70,9 +64,9 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
       element: HTMLImageElement
     ): Pebble => {
       const body = Matter.Bodies.circle(x, y, size, {
-        restitution: 0.4,
-        friction: 0.6,
-        density: 0.002,
+        restitution: 0.3, // Reduced for more stable physics
+        friction: 0.8, // Increased for more stable physics
+        density: 0.003, // Increased for more stable physics
         render: {
           fillStyle: "transparent",
         },
@@ -104,13 +98,13 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     canvas.width = rect.width;
     canvas.height = rect.height;
 
-    // Create engine with lighter gravity for smoother movement
+    // Create engine with optimized gravity for smoother movement
     const engine = Matter.Engine.create({
-      gravity: { x: 0, y: 1, scale: 0.003 },
+      gravity: { x: 0, y: 1, scale: 0.002 }, // Reduced gravity for smoother movement
     });
     engineRef.current = engine;
 
-    // Create renderer
+    // Create renderer with optimized settings
     const render = Matter.Render.create({
       canvas: canvas,
       engine: engine,
@@ -190,9 +184,9 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     const rect = container.getBoundingClientRect();
     const newPebbles: Pebble[] = [];
 
-    // Responsive pebble count
-    const totalPebbles = isMobile ? 12 : 24;
-    const pebblesPerRow = isMobile ? 4 : 6;
+    // Reduced pebble count for better performance
+    const totalPebbles = isMobile ? 8 : 16; // Reduced from 12/24
+    const pebblesPerRow = isMobile ? 3 : 4; // Reduced from 4/6
     const spacing = rect.width / (pebblesPerRow + 1);
 
     // Create pebbles
@@ -202,7 +196,7 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
 
       const x = spacing + col * spacing;
       const y = -50 - row * 40; // Start above the screen
-      const size = isMobile ? 25 + Math.random() * 12 : 22 + Math.random() * 12;
+      const size = isMobile ? 30 + Math.random() * 10 : 25 + Math.random() * 10; // Slightly larger for better visibility
       const imageIndex = Math.floor(Math.random() * pebbleImages.length);
 
       const pebble = createPebble(
@@ -217,8 +211,8 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
 
     setPebbles(newPebbles);
 
-    // Staggered drop over 2.5 seconds
-    const dropDuration = 2500;
+    // Faster drop for better performance
+    const dropDuration = 2000; // Reduced from 2500ms
     const dropInterval = dropDuration / totalPebbles;
 
     newPebbles.forEach((pebble, index) => {
@@ -226,9 +220,9 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
         if (pebble.body && engineRef.current) {
           Matter.World.add(engineRef.current.world, pebble.body);
 
-          // Add slight random velocity
-          const randomX = (Math.random() - 0.5) * 0.5;
-          const randomY = Math.random() * 0.3;
+          // Reduced random velocity for more stable movement
+          const randomX = (Math.random() - 0.5) * 0.3;
+          const randomY = Math.random() * 0.2;
 
           Matter.Body.setVelocity(pebble.body, {
             x: randomX,
@@ -309,16 +303,24 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     });
   }, [pebbles]);
 
-  // Animation loop for drawing
+  // Optimized animation loop with frame rate limiting
   useEffect(() => {
     if (!isInitialized || pebbles.length === 0) return;
 
-    const animate = () => {
+    let lastTime = 0;
+    const animate = (time: number) => {
+      // Limit frame rate to 30 FPS for better performance
+      if (time - lastTime < 33) { // 33ms = ~30 FPS
+        requestAnimationFrame(animate);
+        return;
+      }
+      lastTime = time;
+      
       drawPebbles();
       requestAnimationFrame(animate);
     };
 
-    animate();
+    animate(0);
   }, [isInitialized, pebbles, drawPebbles]);
 
   // Initialize physics on mount
@@ -380,8 +382,8 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
       ref={containerRef}
       className="h-screen relative w-full overflow-hidden flex items-center justify-center"
     >
-      {/* StarField background */}
-      <StarField starCount={150} />
+      {/* StarField background with reduced star count */}
+      <StarField starCount={100} />
 
       {/* Canvas for physics simulation */}
       <canvas

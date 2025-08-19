@@ -15,6 +15,7 @@ const ShootingStars: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
   const animationRef = useRef<number | undefined>(undefined);
+  const lastTimeRef = useRef<number>(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -32,12 +33,12 @@ const ShootingStars: React.FC = () => {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // Create shooting stars
+    // Create shooting stars with optimized parameters
     const createStar = (): Star => {
       const x = Math.random() * canvas.width;
       const y = -20;
-      const vx = (Math.random() - 0.5) * 0.5; // Very slight horizontal movement
-      const vy = Math.random() * 2 + 0.3; // Downward speed between 0.3-2.3 (some much faster)
+      const vx = (Math.random() - 0.5) * 0.3; // Reduced horizontal movement
+      const vy = Math.random() * 1.5 + 0.5; // Reduced speed range
 
       return {
         id: Date.now() + Math.random(),
@@ -45,85 +46,85 @@ const ShootingStars: React.FC = () => {
         y,
         vx,
         vy,
-        size: Math.random() * 0.4 + 0.1, // Size between 0.1-0.5
+        size: Math.random() * 0.3 + 0.1, // Reduced size range
         opacity: 1,
         trail: [],
       };
     };
 
-    // Initialize stars
+    // Initialize stars with reduced count
     const initStars = () => {
       starsRef.current = [];
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 3; i++) { // Reduced from 6 to 3 stars
         setTimeout(() => {
           starsRef.current.push(createStar());
-        }, i * 2000); // Stagger star creation
+        }, i * 3000); // Increased delay between stars
       }
     };
 
-    // Update star trail
+    // Update star trail with simplified logic
     const updateTrail = (star: Star) => {
       star.trail.push({ x: star.x, y: star.y, opacity: star.opacity });
 
-      // Keep only last 15 trail points (reduced for performance)
-      if (star.trail.length > 15) {
+      // Keep only last 8 trail points (reduced for performance)
+      if (star.trail.length > 8) {
         star.trail.shift();
       }
 
-      // Fade trail points more efficiently
+      // Simplified trail fade
       for (let i = 0; i < star.trail.length; i++) {
-        star.trail[i].opacity = Math.max(0, star.trail[i].opacity - 0.08);
+        star.trail[i].opacity = Math.max(0, star.trail[i].opacity - 0.12);
       }
     };
 
-    // Draw star with trail
+    // Draw star with simplified trail
     const drawStar = (star: Star) => {
       if (!ctx) return;
 
-      // Draw trail
+      // Draw trail with reduced effects
       ctx.save();
       ctx.globalCompositeOperation = "screen";
 
-      // Draw trail more efficiently
+      // Simplified trail drawing
       for (let i = 0; i < star.trail.length; i++) {
         const point = star.trail[i];
         const alpha = point.opacity * (i / star.trail.length);
-        if (alpha > 0.01) {
-          // Skip very transparent points
-          ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.15})`;
-          ctx.shadowColor = "rgba(255, 255, 255, 0.4)";
-          ctx.shadowBlur = 3;
+        if (alpha > 0.02) {
+          ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.1})`; // Reduced opacity
+          ctx.shadowColor = "rgba(255, 255, 255, 0.2)"; // Reduced shadow
+          ctx.shadowBlur = 2; // Reduced blur
 
           ctx.beginPath();
-          ctx.arc(point.x, point.y, star.size * 1.5, 0, Math.PI * 2);
+          ctx.arc(point.x, point.y, star.size, 0, Math.PI * 2);
           ctx.fill();
         }
       }
 
-      // Draw main star
-      ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity * 0.6})`;
-      ctx.shadowColor = "rgba(255, 255, 255, 0.5)";
-      ctx.shadowBlur = 4;
+      // Draw main star with simplified effects
+      ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity * 0.4})`; // Reduced opacity
+      ctx.shadowColor = "rgba(255, 255, 255, 0.3)"; // Reduced shadow
+      ctx.shadowBlur = 3; // Reduced blur
 
       ctx.beginPath();
       ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
       ctx.fill();
 
-      // Add subtle glow effect
-      ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity * 0.2})`;
-      ctx.shadowBlur = 8;
-      ctx.beginPath();
-      ctx.arc(star.x, star.y, star.size * 2, 0, Math.PI * 2);
-      ctx.fill();
-
       ctx.restore();
     };
 
-    // Animation loop
+    // Optimized animation loop with frame rate limiting
     const animate = () => {
       if (!ctx || !canvas) return;
 
-      // Clear canvas completely transparent
+      // Limit frame rate to 30 FPS for better performance
+      const time = performance.now();
+      if (time - lastTimeRef.current < 33) { // 33ms = ~30 FPS
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+      lastTimeRef.current = time;
+
+      // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Update and draw stars
@@ -138,14 +139,14 @@ const ShootingStars: React.FC = () => {
         // Draw star
         drawStar(star);
 
-        // Remove stars that are off screen (only check bottom since they only fall down)
+        // Remove stars that are off screen
         if (star.y > canvas.height + 20) {
           starsRef.current.splice(index, 1);
 
-          // Create new star after a delay (reduced delay for better performance)
+          // Create new star after a longer delay
           setTimeout(() => {
             starsRef.current.push(createStar());
-          }, Math.random() * 2000 + 500); // Random delay between 0.5-2.5 seconds
+          }, Math.random() * 4000 + 1000); // Increased delay range
         }
       });
 
