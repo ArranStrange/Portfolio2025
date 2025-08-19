@@ -5,6 +5,7 @@ interface MountainLayer {
   image: string;
   zIndex: number;
   finalOffset: number;
+  width?: string;
 }
 
 interface MountainParallaxProps {
@@ -34,7 +35,7 @@ const MountainParallax: React.FC<MountainParallaxProps> = ({
       image:
         "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754164217/home/portfolio/mountains/Mountain_3.png",
       zIndex: 3,
-      finalOffset: 100,
+      finalOffset: 85,
     },
     {
       image:
@@ -46,13 +47,13 @@ const MountainParallax: React.FC<MountainParallaxProps> = ({
       image:
         "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754164215/home/portfolio/mountains/Mountain_2.png",
       zIndex: 5,
-      finalOffset: 200,
+      finalOffset: 230,
     },
     {
       image:
-        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754164214/home/portfolio/mountains/Mountain_1.png",
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1755591233/Mountain_1_irdjrg.png",
       zIndex: 6,
-      finalOffset: 250,
+      finalOffset: 340,
     },
   ];
 
@@ -67,38 +68,52 @@ const MountainParallax: React.FC<MountainParallaxProps> = ({
     <section
       ref={containerRef}
       id="mountain-section"
-      className="h-screen relative w-full overflow-hidden"
-      style={{ height: "100vh" }}
+      className="h-screen relative w-full overflow-hidden flex items-center justify-center"
+      style={{
+        height: "100vh",
+        width: "100vw",
+        background: "transparent",
+      }}
     >
       {/* Mountain Layers */}
       {mountainLayers.map((layer, index) => {
-        // Static mountain (Mountain 6)
+        // Background mountain (Mountain 6) - now animated
         if (index === 0) {
           return (
-            <div
+            <motion.div
               key={index}
-              className="absolute bottom-0 left-0 w-full h-screen pointer-events-none"
+              className="absolute inset-0 flex items-center justify-center pointer-events-none"
               style={{
                 zIndex: layer.zIndex,
-                width: "100vw",
-                height: "100vh",
+              }}
+              initial={{ y: 600, opacity: 1 }}
+              animate={
+                isInView
+                  ? {
+                      y: layer.finalOffset,
+                      opacity: 1,
+                    }
+                  : { y: 600, opacity: 0.8 }
+              }
+              transition={{
+                duration: 1.2 + index * 0.3,
+                delay: index * 0.2,
+                ease: [0.4, 0.0, 0.2, 1.0],
               }}
             >
               <img
                 src={layer.image}
                 alt={`Mountain layer ${index + 1}`}
-                className="w-full h-full object-cover object-bottom"
+                className="object-cover object-top"
                 style={{
-                  width: "350px",
+                  width: layer.width || "350px",
                   height: "100vh",
                   objectFit: "cover",
                   objectPosition: "top",
-                  position: "absolute",
-                  left: "50%",
-                  transform: "translateX(-50%)",
+                  marginTop: "300px",
                 }}
               />
-            </div>
+            </motion.div>
           );
         }
 
@@ -106,25 +121,23 @@ const MountainParallax: React.FC<MountainParallaxProps> = ({
         return (
           <motion.div
             key={index}
-            className="absolute bottom-0 left-0 w-full h-screen pointer-events-none"
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
             style={{
               zIndex: layer.zIndex,
-              width: "100vw",
-              height: "100vh",
             }}
-            initial={{ y: 800, opacity: 1 }}
+            initial={{ y: 600, opacity: 0.8 }}
             animate={
               isInView
                 ? {
                     y: layer.finalOffset,
                     opacity: 1,
                   }
-                : { y: 800, opacity: 1 }
+                : { y: 600, opacity: 0.8 }
             }
             transition={{
-              duration: 0.8 + index * 0.4,
-              delay: index * 0.4,
-              ease: "easeOut",
+              duration: 1.2 + index * 0.3,
+              delay: index * 0.2,
+              ease: [0.4, 0.0, 0.2, 1.0],
             }}
             onAnimationComplete={() => {
               // Trigger callback when the last mountain (Mountain 1) completes
@@ -136,15 +149,13 @@ const MountainParallax: React.FC<MountainParallaxProps> = ({
             <img
               src={layer.image}
               alt={`Mountain layer ${index + 1}`}
-              className="w-full h-full object-cover object-bottom"
+              className="object-cover object-top"
               style={{
-                width: "350px",
+                width: layer.width || "350px",
                 height: "100vh",
                 objectFit: "cover",
                 objectPosition: "top",
-                position: "absolute",
-                left: "50%",
-                transform: "translateX(-50%)",
+                marginTop: "300px",
               }}
             />
           </motion.div>
