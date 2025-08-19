@@ -92,10 +92,7 @@ const Hero = () => {
       <DayNightCycle />
 
       {/* Intro text section */}
-      <section
-        id="intro-text-section"
-        className="h-screen relative flex items-center justify-center"
-      >
+      <section id="intro-text-section" className="h-screen relative">
         <AnimatePresence>
           {showIntroText && (
             <motion.div
@@ -103,7 +100,7 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 50 }}
               transition={{ duration: 1, ease: "easeOut" }}
-              className="w-full max-w-4xl mx-auto px-6"
+              className="w-full h-full"
             >
               <IntroText
                 showContinueButton={showContinueButton}
