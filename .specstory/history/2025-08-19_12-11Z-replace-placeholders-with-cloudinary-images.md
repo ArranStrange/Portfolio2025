@@ -265,3 +265,53 @@ The images will now be displayed in the project preview section instead of the g
 
 ---
 
+_**User**_
+
+commit create a pull request and merge, don't delete the branch
+
+---
+
+_**Assistant**_
+
+I'll help you commit the changes, create a pull request, and merge it without deleting the branch. Let me start by checking the current git status and then proceed with the workflow.
+
+
+---
+
+```bash
+cd "/Users/arranstrange/Documents/Coding/Portfolio 2" && git status
+```
+
+```
+
+On branch projects-update
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   .specstory/history/2025-08-19_11-50Z-create-a-loading-screen
+-with-sticks.md
+        modified:   src/components/Projects.tsx
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        .specstory/history/2025-08-19_12-11Z-replace-placeholders-with-cloudinar
+y-images.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+---
+
+Great! I can see we're on the `projects-update` branch and there are changes to commit. Let me add the changes and commit them:
+
+
+---
+
+
+
+---
+
+
+
+---
+
