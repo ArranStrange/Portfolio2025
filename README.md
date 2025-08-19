@@ -1,6 +1,21 @@
-# React + TypeScript + Vite
+# Arran Miller-Strange Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, interactive portfolio website built with React, TypeScript, and Vite. Features a unique loading screen with animated stick pile-up effect and smooth transitions throughout the site.
+
+## Features
+
+### Loading Screen
+- **Fade to Static**: Simple fade transition to animated static noise effect
+- **Clean Transition**: No loading text or progress indicators - just smooth static fade
+- **Minimal Design**: Focuses on the transition effect rather than loading feedback
+
+### Technical Features
+- React 18 with TypeScript
+- Framer Motion for smooth animations
+- Tailwind CSS for styling
+- Vite for fast development and building
+- Lenis for smooth scrolling
+- Performance optimizations with reduced motion support
 
 Currently, two official plugins are available:
 

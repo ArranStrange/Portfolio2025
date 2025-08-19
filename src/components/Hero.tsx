@@ -72,7 +72,7 @@ const Hero = () => {
               }}
               className="text-warm-white/80 font-satoshi font-bold uppercase tracking-wider text-lg group-hover:text-warm-white transition-colors"
             >
-              Scroll
+              ARRAN MILLER-STRANGE
             </motion.div>
             <motion.div
               animate={{ y: [0, 10, 0] }}

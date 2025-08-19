@@ -32,7 +32,7 @@ export class PerformanceManager {
     func: T,
     delay: number
   ): (...args: Parameters<T>) => void {
-    let timeoutId: NodeJS.Timeout | null = null;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
     let lastExecTime = 0;
 
     return (...args: Parameters<T>) => {
@@ -56,7 +56,7 @@ export class PerformanceManager {
     func: T,
     delay: number
   ): (...args: Parameters<T>) => void {
-    let timeoutId: NodeJS.Timeout | null = null;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
     return (...args: Parameters<T>) => {
       if (timeoutId) clearTimeout(timeoutId);
@@ -68,23 +68,29 @@ export class PerformanceManager {
 // Utility functions for checking device capabilities
 export const isLowPerformanceDevice = (): boolean => {
   // Check for mobile devices or devices with limited hardware
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
-  );
-  
+  const isMobile =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+
   // Check for reduced motion preference
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
   // Check for low-end devices based on hardware concurrency
-  const lowCPU = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
-  
-  return isMobile || prefersReducedMotion || lowCPU;
+  const lowCPU =
+    navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+
+  return Boolean(isMobile || prefersReducedMotion || lowCPU);
 };
 
 // Optimized requestAnimationFrame wrapper
-export const optimizedRequestAnimationFrame = (callback: FrameRequestCallback): number => {
+export const optimizedRequestAnimationFrame = (
+  callback: FrameRequestCallback
+): number => {
   const performanceManager = PerformanceManager.getInstance();
-  
+
   return requestAnimationFrame((time) => {
     if (!performanceManager.shouldSkipFrame(time)) {
       callback(time);
@@ -96,13 +102,17 @@ export const optimizedRequestAnimationFrame = (callback: FrameRequestCallback): 
 
 // Memory management utilities
 export const cleanupCanvas = (canvas: HTMLCanvasElement): void => {
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
   if (ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 };
 
-export const resizeCanvas = (canvas: HTMLCanvasElement, width: number, height: number): void => {
+export const resizeCanvas = (
+  canvas: HTMLCanvasElement,
+  width: number,
+  height: number
+): void => {
   canvas.width = width;
   canvas.height = height;
 };
@@ -114,22 +124,17 @@ export const createOptimizedAnimationLoop = (
 ): (() => void) => {
   const performanceManager = PerformanceManager.getInstance();
   performanceManager.setFrameRateLimit(fps);
-  
+
   let animationId: number;
   let isRunning = false;
 
   const animate = (time: number) => {
     if (!isRunning) return;
-    
+
     if (!performanceManager.shouldSkipFrame(time)) {
       callback(time);
     }
-    
-    animationId = optimizedRequestAnimationFrame(animate);
-  };
 
-  const start = () => {
-    isRunning = true;
     animationId = optimizedRequestAnimationFrame(animate);
   };
 

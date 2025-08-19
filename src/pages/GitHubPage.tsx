@@ -131,7 +131,7 @@ const GitHubPage: React.FC = () => {
               >
                 <Card
                   size="sm"
-                  variant="glass"
+                  variant="default"
                   className="h-full hover:scale-105 transition-transform duration-300"
                 >
                   <div className="p-4 h-full flex flex-col">
