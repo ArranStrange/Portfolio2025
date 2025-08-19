@@ -21,10 +21,10 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<Matter.Engine | null>(null);
-  const renderRef = useRef<Matter.Render | null>(null);
   const runnerRef = useRef<Matter.Runner | null>(null);
   const mouseConstraintRef = useRef<Matter.MouseConstraint | null>(null);
   const mouseRef = useRef<Matter.Mouse | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
 
   const [pebbles, setPebbles] = useState<Pebble[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -64,9 +64,9 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
       element: HTMLImageElement
     ): Pebble => {
       const body = Matter.Bodies.circle(x, y, size, {
-        restitution: 0.3, // Reduced for more stable physics
-        friction: 0.8, // Increased for more stable physics
-        density: 0.003, // Increased for more stable physics
+        restitution: 0.4,
+        friction: 0.7,
+        density: 0.002,
         render: {
           fillStyle: "transparent",
         },
@@ -94,36 +94,29 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     const mobile = window.innerWidth < 768;
     setIsMobile(mobile);
 
-    // Set canvas size
-    canvas.width = rect.width;
-    canvas.height = rect.height;
+    // Set canvas size with device pixel ratio for crisp rendering
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    canvas.style.width = `${rect.width}px`;
+    canvas.style.height = `${rect.height}px`;
 
-    // Create engine with optimized gravity for smoother movement
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.scale(dpr, dpr);
+    }
+
+    // Create engine with optimized settings
     const engine = Matter.Engine.create({
-      gravity: { x: 0, y: 1, scale: 0.002 }, // Reduced gravity for smoother movement
+      gravity: { x: 0, y: 0.8, scale: 0.001 },
+      enableSleeping: true,
     });
     engineRef.current = engine;
 
-    // Create renderer with optimized settings
-    const render = Matter.Render.create({
-      canvas: canvas,
-      engine: engine,
-      options: {
-        width: rect.width,
-        height: rect.height,
-        wireframes: false,
-        background: "transparent",
-        showAngleIndicator: false,
-        showCollisions: false,
-        showVelocity: false,
-      },
-    });
-    renderRef.current = render;
-
-    // Create invisible boundaries
+    // Create invisible boundaries - use actual screen dimensions
     const ground = Matter.Bodies.rectangle(
       rect.width / 2,
-      rect.height - 5,
+      rect.height - 10,
       rect.width,
       20,
       { isStatic: true, render: { fillStyle: "transparent" } }
@@ -149,7 +142,7 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     Matter.World.add(engine.world, [ground, leftWall, rightWall]);
 
     // Create mouse constraint for dragging pebbles
-    const mouse = Matter.Mouse.create(render.canvas);
+    const mouse = Matter.Mouse.create(canvas);
     mouseRef.current = mouse;
 
     const mouseConstraint = Matter.MouseConstraint.create(engine, {
@@ -165,8 +158,7 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
 
     Matter.World.add(engine.world, mouseConstraint);
 
-    // Start renderer and runner
-    Matter.Render.run(render);
+    // Start runner only (no renderer since we're using custom canvas)
     const runner = Matter.Runner.create();
     runnerRef.current = runner;
     Matter.Runner.run(runner, engine);
@@ -185,8 +177,8 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     const newPebbles: Pebble[] = [];
 
     // Reduced pebble count for better performance
-    const totalPebbles = isMobile ? 8 : 16; // Reduced from 12/24
-    const pebblesPerRow = isMobile ? 3 : 4; // Reduced from 4/6
+    const totalPebbles = isMobile ? 6 : 12;
+    const pebblesPerRow = isMobile ? 3 : 4;
     const spacing = rect.width / (pebblesPerRow + 1);
 
     // Create pebbles
@@ -195,8 +187,8 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
       const col = i % pebblesPerRow;
 
       const x = spacing + col * spacing;
-      const y = -50 - row * 40; // Start above the screen
-      const size = isMobile ? 30 + Math.random() * 10 : 25 + Math.random() * 10; // Slightly larger for better visibility
+      const y = -50 - row * 40;
+      const size = isMobile ? 35 + Math.random() * 15 : 30 + Math.random() * 15;
       const imageIndex = Math.floor(Math.random() * pebbleImages.length);
 
       const pebble = createPebble(
@@ -211,8 +203,8 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
 
     setPebbles(newPebbles);
 
-    // Faster drop for better performance
-    const dropDuration = 2000; // Reduced from 2500ms
+    // Add pebbles to world with staggered timing
+    const dropDuration = 1500;
     const dropInterval = dropDuration / totalPebbles;
 
     newPebbles.forEach((pebble, index) => {
@@ -220,9 +212,9 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
         if (pebble.body && engineRef.current) {
           Matter.World.add(engineRef.current.world, pebble.body);
 
-          // Reduced random velocity for more stable movement
-          const randomX = (Math.random() - 0.5) * 0.3;
-          const randomY = Math.random() * 0.2;
+          // Gentle initial velocity
+          const randomX = (Math.random() - 0.5) * 0.2;
+          const randomY = Math.random() * 0.1;
 
           Matter.Body.setVelocity(pebble.body, {
             x: randomX,
@@ -248,6 +240,12 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     setIsResetting(true);
     setHasStarted(false);
 
+    // Cancel any ongoing animation
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+
     // Remove all pebbles from the world
     pebbles.forEach((pebble) => {
       Matter.World.remove(engineRef.current!.world, pebble.body);
@@ -272,23 +270,29 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
   }, []);
 
   const drawPebbles = useCallback(() => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current || pebbles.length === 0) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Clear canvas
+    // Clear canvas with proper dimensions
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw each pebble
     pebbles.forEach((pebble) => {
+      if (!pebble.body || !pebble.element) return;
+
       const position = pebble.body.position;
       const angle = pebble.body.angle;
 
       ctx.save();
       ctx.translate(position.x, position.y);
       ctx.rotate(angle);
+
+      // Enable image smoothing for better quality
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
 
       // Draw the pebble image
       ctx.drawImage(
@@ -303,24 +307,84 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     });
   }, [pebbles]);
 
-  // Optimized animation loop with frame rate limiting
+  // Mouse interaction handlers
+  const handleMouseDown = useCallback(
+    (event: React.MouseEvent<HTMLCanvasElement>) => {
+      if (!canvasRef.current || !mouseConstraintRef.current) return;
+
+      const canvas = canvasRef.current;
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+
+      // Update mouse position in Matter.js
+      mouseConstraintRef.current.mouse.position.x = mouseX;
+      mouseConstraintRef.current.mouse.position.y = mouseY;
+
+      // Find pebble at mouse position
+      const clickedPebble = pebbles.find((pebble) => {
+        const distance = Math.sqrt(
+          Math.pow(pebble.body.position.x - mouseX, 2) +
+            Math.pow(pebble.body.position.y - mouseY, 2)
+        );
+        return distance <= pebble.size;
+      });
+
+      if (clickedPebble) {
+        // Set the constraint to this pebble
+        mouseConstraintRef.current.body = clickedPebble.body;
+      }
+    },
+    [pebbles]
+  );
+
+  const handleMouseMove = useCallback(
+    (event: React.MouseEvent<HTMLCanvasElement>) => {
+      if (!mouseConstraintRef.current) return;
+
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+
+      // Update mouse position in Matter.js
+      mouseConstraintRef.current.mouse.position.x = mouseX;
+      mouseConstraintRef.current.mouse.position.y = mouseY;
+    },
+    []
+  );
+
+  const handleMouseUp = useCallback(() => {
+    // Let Matter.js handle the constraint release naturally
+  }, []);
+
+  // Optimized animation loop
   useEffect(() => {
     if (!isInitialized || pebbles.length === 0) return;
 
     let lastTime = 0;
+    const targetFPS = 60;
+    const frameInterval = 1000 / targetFPS;
+
     const animate = (time: number) => {
-      // Limit frame rate to 30 FPS for better performance
-      if (time - lastTime < 33) { // 33ms = ~30 FPS
-        requestAnimationFrame(animate);
-        return;
+      if (time - lastTime >= frameInterval) {
+        lastTime = time;
+        drawPebbles();
       }
-      lastTime = time;
-      
-      drawPebbles();
-      requestAnimationFrame(animate);
+
+      animationFrameRef.current = requestAnimationFrame(animate);
     };
 
-    animate(0);
+    animationFrameRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    };
   }, [isInitialized, pebbles, drawPebbles]);
 
   // Initialize physics on mount
@@ -328,11 +392,11 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
     initializePhysics();
 
     return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
       if (runnerRef.current) {
         Matter.Runner.stop(runnerRef.current);
-      }
-      if (renderRef.current) {
-        Matter.Render.stop(renderRef.current);
       }
     };
   }, [initializePhysics]);
@@ -351,8 +415,7 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
   // Handle window resize
   useEffect(() => {
     const handleResize = () => {
-      if (!containerRef.current || !canvasRef.current || !renderRef.current)
-        return;
+      if (!containerRef.current || !canvasRef.current) return;
 
       const container = containerRef.current;
       const rect = container.getBoundingClientRect();
@@ -361,13 +424,19 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
 
-      canvas.width = rect.width;
-      canvas.height = rect.height;
+      // Update canvas size with device pixel ratio
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `${rect.height}px`;
 
-      renderRef.current.canvas.width = rect.width;
-      renderRef.current.canvas.height = rect.height;
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.scale(dpr, dpr);
+      }
 
-      // Reset pebbles when screen size changes for responsive layout
+      // Reset pebbles when screen size changes
       if (hasStarted) {
         resetPebbles();
       }
@@ -388,8 +457,12 @@ const PebblesPhysics: React.FC<PebblesPhysicsProps> = ({
       {/* Canvas for physics simulation */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full cursor-pointer"
         style={{ zIndex: 1 }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
       />
 
       {/* Reset button */}
