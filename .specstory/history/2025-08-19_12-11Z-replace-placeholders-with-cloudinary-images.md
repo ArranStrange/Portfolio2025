@@ -265,3 +265,9 @@ The images will now be displayed in the project preview section instead of the g
 
 ---
 
+_**User**_
+
+commit create a pull request and merge, don't delete the branch
+
+---
+
