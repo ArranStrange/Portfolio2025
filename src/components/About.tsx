@@ -69,7 +69,7 @@ const About = () => {
     if (currentStep < 5) {
       setCurrentStep(currentStep + 1);
     } else {
-      navigate("/contact");
+      navigate("/github");
     }
   };
 
@@ -174,11 +174,11 @@ const About = () => {
                   {/* Next Button */}
                   <motion.button
                     onClick={handleNext}
-                    className="px-6 py-3 border border-warm-white/30 hover:border-warm-white/60 text-warm-white font-satoshi font-medium text-sm tracking-wider uppercase transition-all duration-300 hover:bg-warm-white/5"
+                    className="text-warm-white font-satoshi font-medium text-sm tracking-wider uppercase transition-all duration-300 hover:text-warm-white/80 underline underline-offset-4"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    {isLastStep ? "Continue to Contact" : "Next"}
+                    {isLastStep ? "Continue" : "Next"}
                   </motion.button>
                 </motion.div>
               </div>
@@ -196,7 +196,7 @@ const About = () => {
                   <img
                     src={sections[currentStep].image}
                     alt={sections[currentStep].title}
-                    className="w-full h-full object-cover rounded-lg opacity-80"
+                    className="w-full h-full object-cover rounded-lg opacity-80 object-top"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal/20 to-transparent rounded-lg" />
                 </motion.div>
