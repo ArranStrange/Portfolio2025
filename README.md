@@ -1,84 +1,80 @@
-# Arran Miller-Strange Portfolio
+# Portfolio Website
 
-A modern, interactive portfolio website built with React, TypeScript, and Vite. Features a unique loading screen with animated stick pile-up effect and smooth transitions throughout the site.
+A modern, interactive portfolio website built with React, TypeScript, and Framer Motion.
 
 ## Features
 
-### Loading Screen
-- **Fade to Static**: Simple fade transition to animated static noise effect
-- **Clean Transition**: No loading text or progress indicators - just smooth static fade
-- **Minimal Design**: Focuses on the transition effect rather than loading feedback
+### Interactive About Page
 
-### Technical Features
-- React 18 with TypeScript
-- Framer Motion for smooth animations
-- Tailwind CSS for styling
-- Vite for fast development and building
-- Lenis for smooth scrolling
-- Performance optimizations with reduced motion support
+The About page features a unique interactive experience with 6 animated strands that reveal progressively:
 
-Currently, two official plugins are available:
+- **Progressive Animation Reveal**: Each strand contains a different animation component that becomes visible as users progress through the content
+- **Animated Strands**: Features 6 different animations including:
+  - StarField (reduced star count for performance)
+  - ShootingStars
+  - PebblesPhysics (Matter.js physics simulation)
+  - WaveParallax (animated wave layers)
+  - MountainParallax (mountain landscape animation)
+  - DayNightCycle (sun movement animation)
+- **Interactive Navigation**: Next button reveals new strands and content, with final step navigating to Contact page
+- **Progress Indicator**: Visual dots showing current progress through the 6 steps
+- **Responsive Design**: Optimized for all screen sizes with proper container constraints
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Other Features
 
-## Expanding the ESLint configuration
+- Smooth scrolling with Lenis
+- Performance optimizations for animations
+- SEO optimization
+- Contact form with EmailJS integration
+- Loading screen with transitions
+- Responsive design with Tailwind CSS
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Technologies Used
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- React 19
+- TypeScript
+- Framer Motion
+- Tailwind CSS
+- Matter.js (for physics animations)
+- EmailJS (for contact form)
+- Lenis (for smooth scrolling)
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## Getting Started
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up environment variables for EmailJS (see EMAILJS_SETUP.md)
+4. Run development server: `npm run dev`
+5. Build for production: `npm run build`
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── About.tsx          # Interactive About page with animated strands
+│   ├── StarField.tsx      # Canvas-based star animation
+│   ├── ShootingStars.tsx  # Shooting stars animation
+│   ├── PebblesPhysics.tsx # Matter.js physics simulation
+│   ├── WaveParallax.tsx   # Animated wave layers
+│   ├── MountainParallax.tsx # Mountain landscape animation
+│   ├── DayNightCycle.tsx  # Sun movement animation
+│   └── ...
+├── pages/                 # Page components
+├── hooks/                 # Custom React hooks
+└── utils/                 # Utility functions
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Performance Optimizations
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Reduced star count in StarField for strand layout
+- Canvas-based animations optimized for container constraints
+- Proper cleanup of animation loops
+- Responsive design with mobile-first approach
+- Lazy loading and code splitting where appropriate
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Browser Support
+
+- Modern browsers with ES6+ support
+- Canvas API support for animations
+- WebGL support for advanced graphics (optional)
