@@ -13,67 +13,70 @@ const About = () => {
       title: "ABOUT",
       number: "/00-1",
       content:
-        "AN INDIE WEB DEVELOPER WITH A BACKGROUND IN DESIGN + HOSPITALITY, FOCUSED ON CRAFTING ORIGINAL, BEAUTIFUL APPLICATIONS.",
+        "AN INDIE WEB DEVELOPER WITH A BACKGROUND IN DESIGN, FOCUSED ON CRAFTING ORIGINAL, BEAUTIFUL APPLICATIONS.",
       details:
-        "I specialise in creating applications that blend design and engineering seamlessly—products that are both visually impressive and well-built at their core.",
+        "My goal is to design exceptional user experiences for visually stunning applications. I am passionate about minimalism, clean user interfaces, and impactful typography.",
       image: "/Mountain 1.png",
     },
     {
       title: "APPROACH",
       number: "/00-2",
       content:
-        "EVERY DECISION HAS A PURPOSE, EVERY FEATURE SERVES A NEED. I BELIEVE IN MAKING THE WEB COME ALIVE WITH SUBTLE ANIMATIONS AND COMPLEX INTERACTIONS.",
+        "I’VE BUILT MY SKILLS THROUGH ENDURING ENDLESS STUDY AND HANDS-ON PROJECTS.",
       details:
-        "From subtle animations to complex physics simulations, I craft experiences that engage and delight users while maintaining exceptional performance.",
+        "I'm building one passion project at a time until I’m able to bring that same care and focus into a professional work space.",
+
       image: "/Mountain 3.png",
     },
+
     {
       title: "DETAILS",
       number: "/00-3",
       content:
-        "EVERY PIXEL, EVERY INTERACTION, EVERY LINE OF CODE MATTERS. I OBSESS OVER THE DETAILS THAT TRANSFORM GOOD EXPERIENCES INTO EXCEPTIONAL ONES.",
+        "I AIM TO DESIGN EXPERIENCES THAT FEEL CLEAN, INTUITIVE, AND VISUALLY STRONG. MINIMALISM, TYPOGRAPHY, AND FLOW ARE THE ELEMENTS I KEEP COMING BACK TO.",
       details:
-        "My work combines innovative design, smooth animations, and intuitive functionality to bring ideas to life on the web.",
+        "my focus is on building applications where design and engineering work seamlessly together — products that are both well-crafted under the hood and visually engaging on the surface. i care about creating smooth, intuitive journeys that feel effortless for the user.",
       image: "/Mountain 5.png",
     },
-    {
-      title: "RESPONSIVE",
-      number: "/00-4",
-      content:
-        "LIKE THE WAVES OF THE OCEAN, MY DESIGNS FLOW SEAMLESSLY ACROSS DEVICES AND SCREEN SIZES, ADAPTING TO CREATE THE PERFECT EXPERIENCE.",
-      details:
-        "I focus on delivering seamless functionality that enables engaging and intuitive user journeys across all platforms.",
-      image: "/Waves/Wave 2.png",
-    },
+
     {
       title: "FOUNDATIONS",
-      number: "/00-5",
+      number: "/00-4",
       content:
-        "SOLID FOUNDATIONS CREATE LASTING IMPACT. I BUILD WITH MODERN TECHNOLOGIES AND BEST PRACTICES TO ENSURE YOUR DIGITAL PRESENCE STANDS THE TEST OF TIME.",
+        "MY BACKGROUND IN DESIGN SHAPED HOW I SEE THE WEB — LAYOUT, BALANCE, AND TYPOGRAPHY FIRST TAUGHT ME HOW TO BUILD EXPERIENCES. THAT PATH LED ME INTO DEVELOPMENT.",
       details:
-        "Code that works today and will work tomorrow. I build with modern technologies and best practices to ensure lasting impact.",
+        "Starting in graphic design and creative projects, I learned how to shape visuals that connect with people. Over time, that same eye for detail drew me into code. I now bring both together, crafting interfaces that are thoughtful in design and solid in engineering.",
       image: "/Tree.png",
     },
+
     {
       title: "CONNECT",
-      number: "/00-6",
+      number: "/00-5",
       content:
-        "LET'S BRING YOUR VISION TO LIFE. WHETHER IT'S A SIMPLE WEBSITE OR A COMPLEX WEB APPLICATION, I'M HERE TO TURN YOUR IDEAS INTO REALITY.",
+        "I’M READY TO BRING MY SKILLS INTO A PROFESSIONAL SETTING. FROM DESIGN TO DEVELOPMENT, I’M LOOKING FOR THE RIGHT TEAM TO GROW WITH.",
       details:
-        "Open to collaborating with creatives and chatting about future employment opportunities. Let's create something beautiful together.",
+        "Open to conversations about roles and opportunities in web development. If you're looking for a developer with a different perspective, get in touch.",
       image: "/Mountain 6.png",
     },
   ];
 
   const handleNext = () => {
-    if (currentStep < 5) {
+    if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
     } else {
       navigate("/github");
     }
   };
 
-  const isLastStep = currentStep === 5;
+  const handleBack = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    } else {
+      navigate("/projects");
+    }
+  };
+
+  const isLastStep = currentStep === 4;
 
   return (
     <section className="min-h-screen relative overflow-hidden">
@@ -154,6 +157,16 @@ const About = () => {
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.6 }}
                 >
+                  {/* Back Button */}
+                  <motion.button
+                    onClick={handleBack}
+                    className="text-warm-white font-satoshi font-medium text-sm tracking-wider uppercase transition-all duration-300 hover:text-warm-white/80 underline underline-offset-4"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {currentStep === 0 ? "Back" : "Previous"}
+                  </motion.button>
+
                   {/* Progress Indicator */}
                   <div className="flex gap-2">
                     {sections.map((_, index) => (
