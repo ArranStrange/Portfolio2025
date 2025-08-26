@@ -129,7 +129,7 @@ const Contact = () => {
           viewport={{ once: true }}
           className="section-title"
         >
-          Let's build something together.
+          GET IN TOUCH
         </motion.h2>
 
         <motion.div
