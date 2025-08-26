@@ -14,14 +14,14 @@ const LoadingScreen = ({
 }: LoadingScreenProps) => {
   const [staticIntensity, setStaticIntensity] = useState(0);
 
-    useEffect(() => {
+  useEffect(() => {
     if (!isLoading) {
       // For transitions, complete immediately
       if (isTransitioning) {
         onLoadingComplete();
         return;
       }
- 
+
       // For initial load, fade to static when loading is complete
       setStaticIntensity(1);
 

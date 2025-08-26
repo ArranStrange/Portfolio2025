@@ -27,7 +27,10 @@ const Hero = () => {
   }, [navigate]);
 
   const handleMountainAnimationComplete = () => {
-    setShowIntroText(true);
+    // Small delay to ensure smooth transition
+    setTimeout(() => {
+      setShowIntroText(true);
+    }, 200);
   };
 
   return (
@@ -42,7 +45,7 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
         className="relative z-10"
       >
       {/* Mountain Parallax Section */}
@@ -67,14 +70,19 @@ const Hero = () => {
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ 
+              duration: 0.8, 
+              delay: 1.5, // Delay to let mountain animation settle
+              ease: "easeOut" 
+            }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="text-center space-y-4 cursor-pointer group"
           >
             <motion.div
-              animate={{ y: [0, 10, 0] }}
+              animate={{ y: [0, 8, 0] }} // Reduced movement for smoother animation
               transition={{
-                duration: 2,
+                duration: 3, // Slower for smoother motion
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
@@ -83,9 +91,9 @@ const Hero = () => {
               ARRAN MILLER-STRANGE
             </motion.div>
             <motion.div
-              animate={{ y: [0, 10, 0] }}
+              animate={{ y: [0, 8, 0] }} // Reduced movement for smoother animation
               transition={{
-                duration: 2,
+                duration: 3, // Slower for smoother motion
                 repeat: Infinity,
                 ease: "easeInOut",
                 delay: 0.5,
@@ -104,10 +112,13 @@ const Hero = () => {
         <AnimatePresence>
           {showIntroText && (
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 30 }} // Reduced offset for smoother animation
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 50 }}
-              transition={{ duration: 1, ease: "easeOut" }}
+              exit={{ opacity: 0, y: 30 }}
+              transition={{ 
+                duration: 1.2, 
+                ease: [0.25, 0.46, 0.45, 0.94] // Smoother easing curve
+              }}
               className="w-full h-full"
             >
               <IntroText

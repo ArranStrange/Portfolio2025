@@ -16,57 +16,57 @@ interface WaveParallaxProps {
 const WaveParallax: React.FC<WaveParallaxProps> = ({ onAnimationComplete }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Wave layer configurations
+  // Wave layer configurations with optimized settings
   const waveLayers: WaveLayer[] = [
     {
-      image: "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162612/home/portfolio/waves/Wave_6.png", // Background wave
+      image: "/Waves/Wave 6.png", // Background wave
       zIndex: 1,
       finalOffset: 0,
-      animationSpeed: 4,
+      animationSpeed: 6, // Slower for smoother motion
+      amplitude: 6, // Reduced amplitude
+    },
+    {
+      image: "/Waves/Wave 5.png",
+      zIndex: 2,
+      finalOffset: 50,
+      animationSpeed: 5.5,
       amplitude: 8,
     },
     {
-      image: "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162610/home/portfolio/waves/Wave_5.png",
-      zIndex: 2,
-      finalOffset: 50,
-      animationSpeed: 3.5,
+      image: "/Waves/Wave 4.png",
+      zIndex: 3,
+      finalOffset: 100,
+      animationSpeed: 5,
       amplitude: 10,
     },
     {
-      image: "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162609/home/portfolio/waves/Wave_4.png",
-      zIndex: 3,
-      finalOffset: 100,
-      animationSpeed: 3,
+      image: "/Waves/Wave 3.png",
+      zIndex: 4,
+      finalOffset: 150,
+      animationSpeed: 4.5,
       amplitude: 12,
     },
     {
-      image: "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162608/home/portfolio/waves/Wave_3.png",
-      zIndex: 4,
-      finalOffset: 150,
-      animationSpeed: 2.5,
+      image: "/Waves/Wave 2.png",
+      zIndex: 5,
+      finalOffset: 200,
+      animationSpeed: 4,
       amplitude: 14,
     },
     {
-      image: "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162606/home/portfolio/waves/Wave_2.png",
-      zIndex: 5,
-      finalOffset: 200,
-      animationSpeed: 2,
-      amplitude: 16,
-    },
-    {
-      image: "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754162605/home/portfolio/waves/Wave_1.png",
+      image: "/Waves/Wave 1.png",
       zIndex: 6,
       finalOffset: 250,
-      animationSpeed: 1.5,
-      amplitude: 18,
+      animationSpeed: 3.5,
+      amplitude: 16,
     },
   ];
 
-  // Check if container is in view
+  // Check if container is in view with optimized settings
   const isInView = useInView(containerRef, {
-    margin: "-50px 0px 0px 0px",
-    once: false,
-    amount: 0.1,
+    margin: "-100px 0px 0px 0px", // Increased margin for earlier trigger
+    once: true, // Only trigger once for better performance
+    amount: 0.3, // Trigger when 30% visible for smoother start
   });
 
   return (
@@ -82,7 +82,10 @@ const WaveParallax: React.FC<WaveParallaxProps> = ({ onAnimationComplete }) => {
     >
       {/* Wave Layers */}
       {waveLayers.map((layer, index) => {
-        // All waves are animated (including background Wave 6)
+        // Optimized animation settings
+        const animationDuration = 1.2 + index * 0.3; // Reduced duration spread
+        const animationDelay = index * 0.2; // Reduced delay spread
+        
         return (
           <motion.div
             key={index}
@@ -90,24 +93,31 @@ const WaveParallax: React.FC<WaveParallaxProps> = ({ onAnimationComplete }) => {
             style={{
               zIndex: layer.zIndex,
             }}
-            initial={{ y: 800, opacity: 1 }}
+            initial={{ y: 500, opacity: 0.7 }} // Reduced initial offset
             animate={
               isInView
                 ? {
                     y: layer.finalOffset,
                     opacity: 1,
                   }
-                : { y: 800, opacity: 1 }
+                : { y: 500, opacity: 0.7 }
             }
             transition={{
-              duration: 0.8 + index * 0.4,
-              delay: index * 0.4,
-              ease: "easeOut",
+              duration: animationDuration,
+              delay: animationDelay,
+              ease: [0.25, 0.46, 0.45, 0.94], // Smoother easing curve
+              opacity: {
+                duration: animationDuration * 0.8,
+                delay: animationDelay,
+                ease: "easeOut",
+              },
             }}
             onAnimationComplete={() => {
-              // Trigger callback when the last wave (Wave 1) completes initial animation
-              if (index === 5) {
-                onAnimationComplete?.();
+              // Trigger callback when the last wave completes initial animation
+              if (index === waveLayers.length - 1) {
+                setTimeout(() => {
+                  onAnimationComplete?.();
+                }, 300); // Small delay to ensure smooth completion
               }
             }}
           >
@@ -124,7 +134,7 @@ const WaveParallax: React.FC<WaveParallaxProps> = ({ onAnimationComplete }) => {
               animate={
                 isInView
                   ? {
-                      y: [0, -layer.amplitude, 0, layer.amplitude, 0],
+                      y: [0, -layer.amplitude * 0.5, 0, layer.amplitude * 0.5, 0], // Reduced amplitude for smoother motion
                     }
                   : { y: 0 }
               }
@@ -132,9 +142,11 @@ const WaveParallax: React.FC<WaveParallaxProps> = ({ onAnimationComplete }) => {
                 y: {
                   duration: layer.animationSpeed,
                   repeat: Infinity,
-                  ease: [0.4, 0.0, 0.2, 1.0], // Custom cubic-bezier for smoother motion
+                  ease: "easeInOut", // Simpler easing for smoother continuous motion
+                  repeatDelay: 0, // No delay between repeats
                 },
               }}
+              loading="eager" // Ensure images load immediately
             />
           </motion.div>
         );

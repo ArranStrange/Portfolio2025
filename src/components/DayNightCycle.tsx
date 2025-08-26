@@ -68,6 +68,7 @@ const DayNightCycle: React.FC = () => {
     <>
       {/* Background overlay that changes opacity */}
       <motion.div
+        data-animation="day-night"
         className="fixed inset-0 pointer-events-none z-5"
         style={{
           backgroundColor: "rgba(255, 255, 255, 0.05)",

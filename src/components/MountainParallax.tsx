@@ -20,48 +20,42 @@ const MountainParallax: React.FC<MountainParallaxProps> = ({
   // Mountain layer configurations
   const mountainLayers: MountainLayer[] = [
     {
-      image:
-        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754164221/home/portfolio/mountains/Mountain_6.png", // Static background
+      image: "/Mountain 6.png", // Static background
       zIndex: 1,
       finalOffset: 0,
     },
     {
-      image:
-        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754164219/home/portfolio/mountains/Mountain_5.png",
+      image: "/Mountain 5.png",
       zIndex: 2,
       finalOffset: 50,
     },
     {
-      image:
-        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754164217/home/portfolio/mountains/Mountain_3.png",
+      image: "/Mountain 3.png",
       zIndex: 3,
       finalOffset: 85,
     },
     {
-      image:
-        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754164218/home/portfolio/mountains/Mountain_4.png",
+      image: "/Mountain 4.png",
       zIndex: 4,
       finalOffset: 150,
     },
     {
-      image:
-        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1754164215/home/portfolio/mountains/Mountain_2.png",
+      image: "/Mountain 2.png",
       zIndex: 5,
       finalOffset: 230,
     },
     {
-      image:
-        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1755591233/Mountain_1_irdjrg.png",
+      image: "/Mountain 1.png",
       zIndex: 6,
       finalOffset: 340,
     },
   ];
 
-  // Check if container is in view
+  // Check if container is in view with optimized settings
   const isInView = useInView(containerRef, {
-    margin: "-50px 0px 0px 0px", // Trigger when top is 50px into viewport
-    once: false,
-    amount: 0.1, // Trigger when 10% of the element is visible
+    margin: "-100px 0px 0px 0px", // Increased margin for earlier trigger
+    once: true, // Only trigger once for better performance
+    amount: 0.3, // Trigger when 30% visible for smoother start
   });
 
   return (
@@ -77,47 +71,10 @@ const MountainParallax: React.FC<MountainParallaxProps> = ({
     >
       {/* Mountain Layers */}
       {mountainLayers.map((layer, index) => {
-        // Background mountain (Mountain 6) - now animated
-        if (index === 0) {
-          return (
-            <motion.div
-              key={index}
-              className="absolute inset-0 flex items-center justify-center pointer-events-none"
-              style={{
-                zIndex: layer.zIndex,
-              }}
-              initial={{ y: 600, opacity: 1 }}
-              animate={
-                isInView
-                  ? {
-                      y: layer.finalOffset,
-                      opacity: 1,
-                    }
-                  : { y: 600, opacity: 0.8 }
-              }
-              transition={{
-                duration: 1.2 + index * 0.3,
-                delay: index * 0.2,
-                ease: [0.4, 0.0, 0.2, 1.0],
-              }}
-            >
-              <img
-                src={layer.image}
-                alt={`Mountain layer ${index + 1}`}
-                className="object-cover object-top"
-                style={{
-                  width: layer.width || "350px",
-                  height: "100vh",
-                  objectFit: "cover",
-                  objectPosition: "top",
-                  marginTop: "300px",
-                }}
-              />
-            </motion.div>
-          );
-        }
-
-        // Animated mountains (Mountain 5-1)
+        // Optimized animation settings
+        const animationDuration = 1.5 + index * 0.2; // Reduced duration spread
+        const animationDelay = index * 0.15; // Reduced delay spread
+        
         return (
           <motion.div
             key={index}
@@ -125,24 +82,31 @@ const MountainParallax: React.FC<MountainParallaxProps> = ({
             style={{
               zIndex: layer.zIndex,
             }}
-            initial={{ y: 600, opacity: 0.8 }}
+            initial={{ y: 400, opacity: 0.6 }} // Reduced initial offset
             animate={
               isInView
                 ? {
                     y: layer.finalOffset,
                     opacity: 1,
                   }
-                : { y: 600, opacity: 0.8 }
+                : { y: 400, opacity: 0.6 }
             }
             transition={{
-              duration: 1.2 + index * 0.3,
-              delay: index * 0.2,
-              ease: [0.4, 0.0, 0.2, 1.0],
+              duration: animationDuration,
+              delay: animationDelay,
+              ease: [0.25, 0.46, 0.45, 0.94], // Smoother easing curve
+              opacity: {
+                duration: animationDuration * 0.8,
+                delay: animationDelay,
+                ease: "easeOut",
+              },
             }}
             onAnimationComplete={() => {
-              // Trigger callback when the last mountain (Mountain 1) completes
-              if (index === 5) {
-                onAnimationComplete?.();
+              // Trigger callback when the last mountain completes
+              if (index === mountainLayers.length - 1) {
+                setTimeout(() => {
+                  onAnimationComplete?.();
+                }, 200); // Small delay to ensure smooth completion
               }
             }}
           >
@@ -157,6 +121,7 @@ const MountainParallax: React.FC<MountainParallaxProps> = ({
                 objectPosition: "top",
                 marginTop: "300px",
               }}
+              loading="eager" // Ensure images load immediately
             />
           </motion.div>
         );

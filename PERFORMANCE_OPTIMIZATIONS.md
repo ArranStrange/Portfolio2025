@@ -1,139 +1,218 @@
 # Performance Optimizations
 
-This document outlines the performance optimizations implemented to make the website run smoothly and eliminate glitchy/jolty behavior.
+This document outlines the performance optimizations implemented in the portfolio site to ensure smooth loading and optimal user experience.
 
-## Issues Identified
+## 🚀 Implemented Optimizations
 
-1. **Multiple Heavy Animations Running Simultaneously**
+### 1. Resource Preloading
 
-   - DayNightCycle with complex scroll-based transforms
-   - PebblesPhysics with Matter.js physics engine
-   - StarField with 750 stars animating continuously
-   - ShootingStars with trail effects
-   - VHSGrainOverlay with multiple animated gradients
+- **Critical Images**: All mountain, wave, pebble, and icon images are preloaded
+- **Fonts**: Inter and Satoshi fonts are preloaded with high priority
+- **DNS Prefetching**: External resources are prefetched
+- **Resource Hints**: Proper preload directives for critical resources
 
-2. **Excessive Star Count**: 750 stars in StarField was very high for smooth performance
+### 2. Loading Screen Improvements
 
-3. **Complex Scroll-Based Animations**: DayNightCycle used many `useTransform` calls with complex arrays
+- **Progress Tracking**: Real-time loading progress with visual feedback
+- **Resource Loading**: Waits for critical resources to load before completing
+- **Smooth Transitions**: Proper timing to ensure animations are ready
+- **Fallback Handling**: Graceful degradation if resources fail to load
 
-4. **Physics Engine Running Continuously**: Matter.js physics simulation was computationally expensive
+### 3. Animation Optimizations
 
-5. **Multiple Canvas Animations**: Several components used `requestAnimationFrame` simultaneously
+- **Frame Rate Limiting**: StarField limited to 30 FPS for better performance
+- **Simplified Effects**: Reduced complexity of VHS grain and star animations
+- **Canvas Optimization**: Proper device pixel ratio handling
+- **Reduced Motion Support**: Respects user's motion preferences
 
-## Optimizations Implemented
+### 4. Component Performance
 
-### 1. Dynamic Performance Management
+- **Lazy Loading**: Heavy components load only when needed
+- **Intersection Observer**: Components render when entering viewport
+- **Performance Optimizer**: Wrapper component for heavy elements
+- **Memory Management**: Proper cleanup of animations and observers
 
-- **Performance Hook** (`usePerformance.ts`): Automatically detects device capabilities and user preferences
-- **Reduced Motion Support**: Respects `prefers-reduced-motion` media query
-- **Device Detection**: Identifies low-performance devices and mobile devices
-- **Conditional Rendering**: Disables heavy animations on low-performance devices
+### 5. Performance Monitoring
 
-### 2. StarField Optimizations
+- **Real-time Metrics**: Track load times, paint events, and layout shifts
+- **Performance Suggestions**: Automatic recommendations for improvements
+- **Device Detection**: Adapts to low-performance devices
+- **Analytics Integration**: Performance data tracking
 
-- **Reduced Star Count**: From 750 to 200 (or 100 on low-performance devices)
-- **Frame Rate Limiting**: Limited to 30 FPS for better performance
-- **Simplified Effects**: Reduced twinkling and brightening complexity
-- **Batch Drawing**: Optimized canvas rendering with fewer state changes
+## 📊 Performance Metrics
 
-### 3. DayNightCycle Optimizations
+### Target Metrics
 
-- **Simplified Transforms**: Reduced keyframes from 9 to 5 for smoother interpolation
-- **Reduced Animation Intensity**: Smaller scale and opacity changes
-- **Longer Durations**: Increased animation duration for smoother movement
-- **Optimized Motion Parameters**: Reduced radius and movement range
+- **First Contentful Paint**: < 2 seconds
+- **Largest Contentful Paint**: < 2.5 seconds
+- **Cumulative Layout Shift**: < 0.1
+- **Time to Interactive**: < 3.5 seconds
+- **Load Time**: < 3 seconds
 
-### 4. ShootingStars Optimizations
+### Monitoring
 
-- **Reduced Star Count**: From 6 to 3 concurrent stars
-- **Simplified Trails**: Reduced trail points from 15 to 8
-- **Frame Rate Limiting**: Limited to 30 FPS
-- **Reduced Effects**: Simplified glow and shadow effects
-- **Longer Delays**: Increased time between star spawns
+The site includes real-time performance monitoring that tracks:
 
-### 5. VHSGrainOverlay Optimizations
+- Page load times
+- DOM content loaded events
+- Paint timing events
+- Layout shift measurements
+- Input delay metrics
 
-- **Reduced Gradient Layers**: From 5 to 3 gradient layers
-- **Simplified Animations**: Longer durations for smoother movement
-- **Conditional Rendering**: Disabled on low-performance devices
-- **Reduced Intensity**: Lower opacity values for better performance
+## 🔧 Technical Optimizations
 
-### 6. PebblesPhysics Optimizations
+### Image Optimization
 
-- **Reduced Pebble Count**: From 12/24 to 8/16 pebbles
-- **Optimized Physics**: Adjusted gravity, friction, and density for stability
-- **Frame Rate Limiting**: Limited to 30 FPS
-- **Faster Drop**: Reduced drop duration from 2.5s to 2s
-- **Reduced Image Count**: From 12 to 6 pebble images
+```typescript
+// Preload critical images
+const criticalResources = [
+  "/Mountain 1.png",
+  "/Mountain 2.png",
+  // ... all critical images
+];
 
-### 7. Performance Utilities
+// Resource loading with progress tracking
+const loadImage = (src: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
+    img.src = src;
+  });
+};
+```
 
-- **PerformanceManager**: Singleton class for managing frame rates and throttling
-- **Optimized Animation Loops**: Wrapper for `requestAnimationFrame` with frame limiting
-- **Memory Management**: Utilities for canvas cleanup and resizing
-- **Throttling/Debouncing**: Functions for optimizing event handlers
+### Animation Performance
 
-## Performance Settings by Device Type
+```typescript
+// Optimized animation loop
+const animate = (time: number) => {
+  // Limit frame rate to 30 FPS
+  if (time - lastTimeRef.current < 33) {
+    animationRef.current = requestAnimationFrame(animate);
+    return;
+  }
+  lastTimeRef.current = time;
 
-### High-Performance Devices
+  // Simplified rendering
+  // ... optimized drawing code
+};
+```
 
-- Star Count: 200
-- Animation FPS: 30
-- All animations enabled
-- VHS grain: 50% intensity
-- Smooth scrolling: 1.2s duration
+### Component Lazy Loading
 
-### Low-Performance Devices
+```typescript
+// Performance optimizer wrapper
+<PerformanceOptimizer
+  enableLazyLoading={true}
+  threshold={0.1}
+  fallback={<LoadingSpinner />}
+>
+  <HeavyComponent />
+</PerformanceOptimizer>
+```
 
-- Star Count: 100
-- Animation FPS: 24
-- VHS grain disabled
-- Shooting stars disabled
-- Smooth scrolling: 0.8s duration
+## 🎯 Best Practices
 
-### Reduced Motion Preference
+### 1. Resource Loading
 
-- Star Count: 100
-- Animation FPS: 24
-- VHS grain: 20% intensity
-- Faster transitions
-- Less sensitive scrolling
+- Use `preload` for critical resources
+- Implement progressive loading for non-critical assets
+- Optimize image formats (WebP when possible)
+- Compress and minify all assets
 
-## Browser Compatibility
+### 2. Animation Performance
 
-The optimizations work across all modern browsers and include:
+- Limit frame rates to 30 FPS for complex animations
+- Use `transform` and `opacity` for smooth animations
+- Avoid layout-triggering properties
+- Implement reduced motion support
 
-- **Mobile Detection**: Automatic optimization for mobile devices
-- **Hardware Concurrency**: Checks CPU cores for performance estimation
-- **Reduced Motion**: Respects accessibility preferences
-- **Canvas Optimization**: Efficient rendering for all screen sizes
+### 3. Component Optimization
 
-## Monitoring Performance
+- Lazy load heavy components
+- Use React.memo for expensive components
+- Implement proper cleanup in useEffect
+- Avoid unnecessary re-renders
 
-To monitor performance improvements:
+### 4. Monitoring and Analytics
 
-1. **Chrome DevTools**: Use Performance tab to measure frame rates
-2. **Lighthouse**: Run audits to check for performance regressions
-3. **Real User Monitoring**: Check actual device performance
-4. **Frame Rate**: Target 30+ FPS on all devices
+- Track Core Web Vitals
+- Monitor real user metrics
+- Set up performance budgets
+- Regular performance audits
 
-## Future Optimizations
+## 🛠️ Additional Recommendations
 
-Consider these additional optimizations if needed:
+### 1. Image Optimization
 
-1. **Web Workers**: Move heavy calculations to background threads
-2. **WebGL**: Use WebGL for complex visual effects
-3. **Lazy Loading**: Load animations only when needed
-4. **Progressive Enhancement**: Start with basic animations, enhance for capable devices
-5. **Asset Optimization**: Compress images and use WebP format
+- Convert images to WebP format with fallbacks
+- Implement responsive images with `srcset`
+- Use appropriate image sizes for different devices
+- Consider using a CDN for image delivery
 
-## Usage
+### 2. Code Splitting
 
-The performance optimizations are automatic and require no user intervention. The system:
+- Implement route-based code splitting
+- Lazy load non-critical components
+- Use dynamic imports for heavy libraries
+- Optimize bundle sizes
 
-1. Detects device capabilities on load
-2. Applies appropriate settings
-3. Monitors for preference changes
-4. Adjusts performance in real-time
+### 3. Caching Strategy
 
-All optimizations maintain the visual appeal while ensuring smooth performance across all devices.
+- Implement service worker for offline support
+- Use appropriate cache headers
+- Cache static assets aggressively
+- Implement cache invalidation strategy
+
+### 4. Server Optimization
+
+- Enable gzip compression
+- Use HTTP/2 for multiplexing
+- Implement proper caching headers
+- Consider using a CDN
+
+## 📈 Performance Monitoring
+
+### Development Tools
+
+- Chrome DevTools Performance tab
+- Lighthouse audits
+- WebPageTest for real-world testing
+- React DevTools Profiler
+
+### Production Monitoring
+
+- Real User Monitoring (RUM)
+- Core Web Vitals tracking
+- Error tracking and performance alerts
+- A/B testing for performance improvements
+
+## 🔄 Continuous Optimization
+
+### Regular Audits
+
+- Weekly performance reviews
+- Monthly optimization sprints
+- Quarterly performance goals review
+- Annual performance strategy updates
+
+### Optimization Process
+
+1. **Measure**: Use performance monitoring tools
+2. **Identify**: Find performance bottlenecks
+3. **Optimize**: Implement targeted improvements
+4. **Test**: Verify improvements in staging
+5. **Deploy**: Release optimizations
+6. **Monitor**: Track performance improvements
+
+## 📚 Resources
+
+- [Web Performance Best Practices](https://web.dev/performance/)
+- [Core Web Vitals](https://web.dev/vitals/)
+- [React Performance Optimization](https://react.dev/learn/render-and-commit)
+- [Vite Performance Optimization](https://vitejs.dev/guide/performance.html)
+
+---
+
+_This document should be updated regularly as new optimizations are implemented and performance goals evolve._

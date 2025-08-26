@@ -1,4 +1,5 @@
 // Performance optimization utilities
+import React from "react";
 
 export class PerformanceManager {
   private static instance: PerformanceManager;
@@ -146,4 +147,121 @@ export const createOptimizedAnimationLoop = (
   };
 
   return stop;
+};
+
+// Lazy loading utilities
+export const lazyLoadComponent = <T extends React.ComponentType<any>>(
+  importFunc: () => Promise<{ default: T }>,
+  fallback?: React.ComponentType
+): React.LazyExoticComponent<T> => {
+  return React.lazy(() => {
+    return new Promise((resolve) => {
+      // Add a small delay to ensure smooth loading
+      setTimeout(() => {
+        importFunc().then(resolve);
+      }, 100);
+    });
+  });
+};
+
+// Intersection Observer for performance
+export const createIntersectionObserver = (
+  callback: IntersectionObserverCallback,
+  options: IntersectionObserverInit = {}
+): IntersectionObserver => {
+  const defaultOptions: IntersectionObserverInit = {
+    root: null,
+    rootMargin: "50px",
+    threshold: 0.1,
+    ...options,
+  };
+
+  return new IntersectionObserver(callback, defaultOptions);
+};
+
+// Performance monitoring
+export const measurePerformance = (name: string, fn: () => void): void => {
+  if (process.env.NODE_ENV === "development") {
+    const start = performance.now();
+    fn();
+    const end = performance.now();
+    console.log(`${name} took ${end - start}ms`);
+  } else {
+    fn();
+  }
+};
+
+// Batch DOM updates
+export const batchDOMUpdates = (updates: (() => void)[]): void => {
+  if (typeof window !== "undefined" && window.requestAnimationFrame) {
+    requestAnimationFrame(() => {
+      updates.forEach((update) => update());
+    });
+  } else {
+    updates.forEach((update) => update());
+  }
+};
+
+// Optimize heavy computations
+export const optimizeHeavyComputation = <T>(
+  computation: () => T,
+  deps: any[],
+  delay: number = 100
+): T | null => {
+  const [result, setResult] = React.useState<T | null>(null);
+  const timeoutRef = React.useRef<NodeJS.Timeout>();
+
+  React.useEffect(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      const computed = computation();
+      setResult(computed);
+    }, delay);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, deps);
+
+  return result;
+};
+
+// Preload images for better performance
+export const preloadImages = (imageUrls: string[]): Promise<void[]> => {
+  const imagePromises = imageUrls.map((url) => {
+    return new Promise<void>((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error(`Failed to load image: ${url}`));
+      img.src = url;
+    });
+  });
+
+  return Promise.all(imagePromises);
+};
+
+// Optimize scroll events
+export const createOptimizedScrollHandler = (
+  handler: (event: Event) => void,
+  throttleMs: number = 16
+): ((event: Event) => void) => {
+  const performanceManager = PerformanceManager.getInstance();
+  return performanceManager.throttle(handler, throttleMs);
+};
+
+// Check if element is in viewport
+export const isInViewport = (element: Element): boolean => {
+  const rect = element.getBoundingClientRect();
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <=
+      (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
 };

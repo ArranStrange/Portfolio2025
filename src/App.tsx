@@ -21,8 +21,10 @@ import VHSGrainOverlay from "./components/VHSGrainOverlay";
 import DayNightCycle from "./components/DayNightCycle";
 import LoadingScreen from "./components/LoadingScreen";
 import Analytics from "./components/Analytics";
+import PageTransition from "./components/PageTransition";
 import { usePerformance } from "./hooks/usePerformance";
 import { useLoading } from "./hooks/useLoading";
+import { usePerformanceMonitor } from "./hooks/usePerformanceMonitor";
 
 // Extend Window interface to include Lenis
 declare global {
@@ -32,33 +34,18 @@ declare global {
 }
 
 // Component to handle scroll to top on route changes
-function ScrollToTop({
-  startTransition,
-  endTransition,
-}: {
-  startTransition: () => void;
-  endTransition: () => void;
-}) {
+function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // Start transition when route changes
-    startTransition();
+    // Scroll to top when pathname changes
+    window.scrollTo(0, 0);
 
-    // Small delay to ensure transition starts before scroll
-    setTimeout(() => {
-      // Scroll to top when pathname changes
-      window.scrollTo(0, 0);
-
-      // If Lenis is available, use it for smooth scrolling
-      if (window.lenis) {
-        window.lenis.scrollTo(0, { immediate: true });
-      }
-
-      // End transition after scroll
-      endTransition();
-    }, 100);
-  }, [pathname, startTransition, endTransition]);
+    // If Lenis is available, use it for smooth scrolling
+    if (window.lenis) {
+      window.lenis.scrollTo(0, { immediate: true });
+    }
+  }, [pathname]);
 
   return null;
 }
@@ -67,12 +54,10 @@ function App() {
   const { settings, getComponentSettings } = usePerformance();
   const {
     isLoading,
-    isTransitioning,
     loadingComplete,
     handleLoadingComplete,
-    startTransition,
-    endTransition,
   } = useLoading();
+  const { isLowPerformance, suggestions } = usePerformanceMonitor();
 
   useEffect(() => {
     // Initialize Lenis for smooth scrolling with optimized settings
@@ -118,11 +103,11 @@ function App() {
         />
       )}
 
-      {/* Loading Screen */}
+      {/* Loading Screen - Only shows on first render */}
       <LoadingScreen
         isLoading={isLoading}
         onLoadingComplete={handleLoadingComplete}
-        isTransitioning={isTransitioning}
+        isTransitioning={false}
       />
 
       {/* Main App Content */}
@@ -130,10 +115,7 @@ function App() {
         <HelmetProvider>
           <Router>
             <div className="relative min-h-screen">
-              <ScrollToTop
-                startTransition={startTransition}
-                endTransition={endTransition}
-              />
+              <ScrollToTop />
 
               {/* Conditionally render day/night cycle */}
               {dayNightSettings.enabled && <DayNightCycle />}
@@ -153,14 +135,16 @@ function App() {
               >
                 <Navigation />
                 <Analytics />
-                <Routes>
-                  <Route path="/" element={<Hero />} />
-                  <Route path="/projects" element={<ProjectsPage />} />
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="/github" element={<GitHubPage />} />
-                  <Route path="/blog" element={<BlogPage />} />
-                  <Route path="/contact" element={<ContactPage />} />
-                </Routes>
+                <PageTransition>
+                  <Routes>
+                    <Route path="/" element={<Hero />} />
+                    <Route path="/projects" element={<ProjectsPage />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/github" element={<GitHubPage />} />
+                    <Route path="/blog" element={<BlogPage />} />
+                    <Route path="/contact" element={<ContactPage />} />
+                  </Routes>
+                </PageTransition>
               </motion.div>
             </div>
           </Router>
