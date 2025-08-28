@@ -16,7 +16,8 @@ const About = () => {
         "AN INDIE WEB DEVELOPER WITH A BACKGROUND IN DESIGN, FOCUSED ON CRAFTING ORIGINAL, BEAUTIFUL APPLICATIONS.",
       details:
         "My goal is to design exceptional user experiences for visually stunning applications. I am passionate about minimalism, clean user interfaces, and impactful typography.",
-      image: "/Mountain 1.png",
+      image:
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1756394550/ME_and_Rhodes_hjosni.png",
     },
     {
       title: "APPROACH",
@@ -26,7 +27,8 @@ const About = () => {
       details:
         "I'm building one passion project at a time until I’m able to bring that same care and focus into a professional work space.",
 
-      image: "/Mountain 3.png",
+      image:
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1756394548/Glasto_mdecws.png",
     },
 
     {
@@ -36,17 +38,19 @@ const About = () => {
         "I AIM TO DESIGN EXPERIENCES THAT FEEL CLEAN, INTUITIVE, AND VISUALLY STRONG. MINIMALISM, TYPOGRAPHY, AND FLOW ARE THE ELEMENTS I KEEP COMING BACK TO.",
       details:
         "my focus is on building applications where design and engineering work seamlessly together — products that are both well-crafted under the hood and visually engaging on the surface. i care about creating smooth, intuitive journeys that feel effortless for the user.",
-      image: "/Mountain 5.png",
+      image:
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1756396024/Cardiff_jfalgx.png",
     },
 
     {
       title: "FOUNDATIONS",
       number: "/00-4",
       content:
-        "MY BACKGROUND IN DESIGN SHAPED HOW I SEE THE WEB — LAYOUT, BALANCE, AND TYPOGRAPHY FIRST TAUGHT ME HOW TO BUILD EXPERIENCES. THAT PATH LED ME INTO DEVELOPMENT.",
+        "MY BACKGROUND IN DESIGN SHAPED HOW I SEE THE WEB; LAYOUT, BALANCE, AND TYPOGRAPHY FIRST TAUGHT ME HOW TO BUILD EXPERIENCES. THAT PATH LED ME INTO DEVELOPMENT.",
       details:
         "Starting in graphic design and creative projects, I learned how to shape visuals that connect with people. Over time, that same eye for detail drew me into code. I now bring both together, crafting interfaces that are thoughtful in design and solid in engineering.",
-      image: "/Tree.png",
+      image:
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1756395548/brecon_drhjlc.png",
     },
 
     {
@@ -56,7 +60,8 @@ const About = () => {
         "I’M READY TO BRING MY SKILLS INTO A PROFESSIONAL SETTING. FROM DESIGN TO DEVELOPMENT, I’M LOOKING FOR THE RIGHT TEAM TO GROW WITH.",
       details:
         "Open to conversations about roles and opportunities in web development. If you're looking for a developer with a different perspective, get in touch.",
-      image: "/Mountain 6.png",
+      image:
+        "https://res.cloudinary.com/dw6klz9kg/image/upload/v1756395547/Gower_dstwtf.png",
     },
   ];
 
@@ -197,7 +202,7 @@ const About = () => {
               </div>
 
               {/* Image Section */}
-              <div className="flex items-center justify-center">
+              <div className="flex items-start justify-center pt-4">
                 <motion.div
                   key={currentStep}
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -209,7 +214,7 @@ const About = () => {
                   <img
                     src={sections[currentStep].image}
                     alt={sections[currentStep].title}
-                    className="w-full h-full object-cover rounded-lg opacity-80 object-top"
+                    className="w-full h-full object-cover rounded-lg opacity-80 object-center"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal/20 to-transparent rounded-lg" />
                 </motion.div>

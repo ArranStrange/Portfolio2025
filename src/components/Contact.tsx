@@ -120,7 +120,7 @@ const Contact = () => {
   };
 
   return (
-    <section className="h-screen flex items-center justify-center">
+    <section className="min-h-screen flex items-center justify-center pt-20 md:pt-0">
       <div className="section-padding max-w-2xl mx-auto text-center">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
