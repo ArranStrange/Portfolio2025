@@ -21,14 +21,6 @@ const BlogPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // Debug effect to log posts state changes
-  useEffect(() => {
-    console.log("Posts state updated:", posts.length, "posts");
-    if (posts.length > 0) {
-      console.log("First post:", posts[0]);
-    }
-  }, [posts]);
-
   // Handle scroll to show/hide scroll-to-top button
   useEffect(() => {
     const handleScroll = () => {
@@ -40,7 +32,7 @@ const BlogPage: React.FC = () => {
   }, []);
 
   const handleWaveAnimationComplete = () => {
-    console.log("Wave animation completed");
+    // Wave animation completed
   };
 
   const scrollToTop = () => {
@@ -53,42 +45,31 @@ const BlogPage: React.FC = () => {
   useEffect(() => {
     const fetchPosts = async (retryCount = 0) => {
       try {
-        console.log(
-          "Fetching blog posts from dev.to... (attempt",
-          retryCount + 1,
-          ")"
-        );
-        // Add timestamp to prevent caching
+        // Enhanced cache busting with multiple parameters
         const timestamp = new Date().getTime();
-        const url = `https://dev.to/api/articles?username=arranstrange&_t=${timestamp}`;
-        console.log("Fetching from URL:", url);
+        const randomId = Math.random().toString(36).substring(7);
+        const url = `https://dev.to/api/articles?username=arranstrange&per_page=100&_t=${timestamp}&_r=${randomId}&_v=${Date.now()}`;
 
-        const response = await fetch(url);
-        console.log("Response status:", response.status);
-        console.log(
-          "Response headers:",
-          Object.fromEntries(response.headers.entries())
-        );
+        const response = await fetch(url, {
+          method: "GET",
+          cache: "no-store",
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
-        console.log("Fetched posts:", data.length, "posts");
-        console.log("Posts data:", data);
+
+        // Additional validation
+        if (!Array.isArray(data)) {
+          throw new Error("Invalid data format received from API");
+        }
+
         setPosts(data);
       } catch (err) {
-        console.error("Error fetching posts:", err);
-        console.error("Error details:", {
-          name: err instanceof Error ? err.name : "Unknown",
-          message: err instanceof Error ? err.message : String(err),
-          stack: err instanceof Error ? err.stack : "No stack trace",
-        });
-
         // Retry once if it's the first attempt
         if (retryCount === 0) {
-          console.log("Retrying fetch...");
           setTimeout(() => fetchPosts(1), 2000);
           return;
         }
@@ -102,7 +83,7 @@ const BlogPage: React.FC = () => {
     };
 
     fetchPosts();
-  }, [error]);
+  }, [error]); // Only re-run on error changes
 
   return (
     <>
