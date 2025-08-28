@@ -151,8 +151,7 @@ export const createOptimizedAnimationLoop = (
 
 // Lazy loading utilities
 export const lazyLoadComponent = <T extends React.ComponentType<any>>(
-  importFunc: () => Promise<{ default: T }>,
-  fallback?: React.ComponentType
+  importFunc: () => Promise<{ default: T }>
 ): React.LazyExoticComponent<T> => {
   return React.lazy(() => {
     return new Promise((resolve) => {
@@ -193,7 +192,7 @@ export const measurePerformance = (name: string, fn: () => void): void => {
 
 // Batch DOM updates
 export const batchDOMUpdates = (updates: (() => void)[]): void => {
-  if (typeof window !== "undefined" && window.requestAnimationFrame) {
+  if (typeof window !== "undefined" && typeof window.requestAnimationFrame === "function") {
     requestAnimationFrame(() => {
       updates.forEach((update) => update());
     });
@@ -209,7 +208,7 @@ export const optimizeHeavyComputation = <T>(
   delay: number = 100
 ): T | null => {
   const [result, setResult] = React.useState<T | null>(null);
-  const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const timeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined);
 
   React.useEffect(() => {
     if (timeoutRef.current) {

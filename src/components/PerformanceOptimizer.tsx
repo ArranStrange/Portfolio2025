@@ -19,8 +19,6 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({
   enableLazyLoading = true,
   enableReducedMotion = true,
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -33,8 +31,6 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({
 
   useEffect(() => {
     if (!enableLazyLoading) {
-      setIsVisible(true);
-      setIsLoaded(true);
       setShouldRender(true);
       return;
     }
@@ -47,10 +43,8 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setIsVisible(true);
             // Small delay to ensure smooth loading
             setTimeout(() => {
-              setIsLoaded(true);
               setShouldRender(true);
             }, 100);
             
@@ -79,9 +73,7 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({
 
     const container = containerRef.current;
     if (container && isInViewport(container)) {
-      setIsVisible(true);
       setTimeout(() => {
-        setIsLoaded(true);
         setShouldRender(true);
       }, 100);
     }

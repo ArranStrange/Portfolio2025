@@ -24,7 +24,7 @@ import Analytics from "./components/Analytics";
 import PageTransition from "./components/PageTransition";
 import { usePerformance } from "./hooks/usePerformance";
 import { useLoading } from "./hooks/useLoading";
-import { usePerformanceMonitor } from "./hooks/usePerformanceMonitor";
+// import { usePerformanceMonitor } from "./hooks/usePerformanceMonitor";
 
 // Extend Window interface to include Lenis
 declare global {
@@ -52,12 +52,9 @@ function ScrollToTop() {
 
 function App() {
   const { settings, getComponentSettings } = usePerformance();
-  const {
-    isLoading,
-    loadingComplete,
-    handleLoadingComplete,
-  } = useLoading();
-  const { isLowPerformance, suggestions } = usePerformanceMonitor();
+  const { isLoading, loadingComplete, handleLoadingComplete } = useLoading();
+  // Performance monitoring is available but not currently used
+  // const { isLowPerformance } = usePerformanceMonitor();
 
   useEffect(() => {
     // Initialize Lenis for smooth scrolling with optimized settings
