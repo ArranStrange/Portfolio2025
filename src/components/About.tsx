@@ -85,9 +85,6 @@ const About = () => {
 
   return (
     <section className="min-h-screen relative overflow-hidden">
-      {/* Background with subtle noise texture */}
-      <div className="absolute inset-0 bg-charcoal" />
-
       {/* Main content container */}
       <div className="relative z-10 min-h-screen flex items-center justify-center section-padding">
         <div className="w-full max-w-6xl mx-auto">

@@ -90,9 +90,9 @@ const ShootingStars: React.FC = () => {
         const point = star.trail[i];
         const alpha = point.opacity * (i / star.trail.length);
         if (alpha > 0.02) {
-          ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.1})`; // Reduced opacity
-          ctx.shadowColor = "rgba(255, 255, 255, 0.2)"; // Reduced shadow
-          ctx.shadowBlur = 2; // Reduced blur
+          ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.3})`; // Increased opacity
+          ctx.shadowColor = "rgba(255, 255, 255, 0.4)"; // Increased shadow
+          ctx.shadowBlur = 4; // Increased blur
 
           ctx.beginPath();
           ctx.arc(point.x, point.y, star.size, 0, Math.PI * 2);
@@ -101,9 +101,9 @@ const ShootingStars: React.FC = () => {
       }
 
       // Draw main star with simplified effects
-      ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity * 0.4})`; // Reduced opacity
-      ctx.shadowColor = "rgba(255, 255, 255, 0.3)"; // Reduced shadow
-      ctx.shadowBlur = 3; // Reduced blur
+      ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity * 0.8})`; // Increased opacity
+      ctx.shadowColor = "rgba(255, 255, 255, 0.6)"; // Increased shadow
+      ctx.shadowBlur = 6; // Increased blur
 
       ctx.beginPath();
       ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
