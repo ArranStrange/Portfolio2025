@@ -40,12 +40,12 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
         y: -5,
         transition: { duration: 0.2 },
       }}
-      className="backdrop-blur-sm rounded-lg p-6 border border-white/20 hover:border-white/40 transition-all duration-300 cursor-pointer group"
+      className="backdrop-blur-sm rounded-lg p-6 border border-white/20 hover:border-white/40 transition-all duration-300 cursor-pointer group h-full flex flex-col"
       onClick={() => window.open(post.url, "_blank")}
     >
       {/* Cover Image */}
       {post.cover_image && (
-        <div className="mb-4 overflow-hidden rounded-md">
+        <div className="mb-4 overflow-hidden rounded-md flex-shrink-0">
           <img
             src={post.cover_image}
             alt={post.title}
@@ -55,9 +55,9 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
       )}
 
       {/* Content */}
-      <div className="space-y-3">
+      <div className="space-y-3 flex-1 flex flex-col">
         {/* Tags */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 flex-shrink-0">
           {post.tag_list.slice(0, 3).map((tag, tagIndex) => (
             <span
               key={tagIndex}
@@ -69,17 +69,31 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
         </div>
 
         {/* Title */}
-        <h3 className="text-xl font-bold text-warm-white group-hover:text-white transition-colors duration-300 line-clamp-2">
+        <h3
+          className="text-xl font-bold text-warm-white group-hover:text-white transition-colors duration-300 overflow-hidden flex-shrink-0"
+          style={{
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+          }}
+        >
           {post.title}
         </h3>
 
         {/* Description */}
-        <p className="text-warm-white/80 text-sm line-clamp-3 leading-relaxed">
+        <p
+          className="text-warm-white/80 text-sm leading-relaxed overflow-hidden flex-1"
+          style={{
+            display: "-webkit-box",
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: "vertical",
+          }}
+        >
           {post.description}
         </p>
 
         {/* Meta Info */}
-        <div className="flex items-center justify-between text-warm-white/60 text-xs pt-2 border-t border-white/10">
+        <div className="flex items-center justify-between text-warm-white/60 text-xs pt-2 border-t border-white/10 flex-shrink-0">
           <span>{formatDate(post.published_at)}</span>
           <span>{post.reading_time_minutes} min read</span>
         </div>

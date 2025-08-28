@@ -23,13 +23,17 @@ const VHSGrainOverlay: React.FC<VHSGrainOverlayProps> = ({
           radial-gradient(circle at 25% 25%, rgba(255,255,255,0.15) 1px, transparent 1px),
           radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 1px, transparent 1px)
         `,
-        backgroundSize: "200px 200px, 150px 150px",
+        backgroundSize:
+          "clamp(150px, 15vw, 200px) clamp(150px, 15vw, 200px), clamp(100px, 12vw, 150px) clamp(100px, 12vw, 150px)",
         opacity: intensity,
         mixBlendMode: "overlay",
         pointerEvents: "none",
       }}
       animate={{
-        backgroundPosition: ["0px 0px, 0px 0px", "200px 200px, 150px 150px"],
+        backgroundPosition: [
+          "0px 0px, 0px 0px",
+          "clamp(150px, 15vw, 200px) clamp(150px, 15vw, 200px), clamp(100px, 12vw, 150px) clamp(100px, 12vw, 150px)",
+        ],
       }}
       transition={{
         duration: 15 / speed, // Increased duration for smoother animation
@@ -45,15 +49,18 @@ const VHSGrainOverlay: React.FC<VHSGrainOverlayProps> = ({
             repeating-linear-gradient(
               0deg,
               transparent,
-              transparent 4px,
-              rgba(255,255,255,0.03) 4px,
-              rgba(255,255,255,0.03) 8px
+              transparent clamp(3px, 0.3vw, 4px),
+              rgba(255,255,255,0.03) clamp(3px, 0.3vw, 4px),
+              rgba(255,255,255,0.03) clamp(6px, 0.6vw, 8px)
             )
           `,
           mixBlendMode: "soft-light",
         }}
         animate={{
-          backgroundPosition: ["0px 0px", "8px 8px"],
+          backgroundPosition: [
+            "0px 0px",
+            "clamp(6px, 0.6vw, 8px) clamp(6px, 0.6vw, 8px)",
+          ],
         }}
         transition={{
           duration: 25 / speed, // Increased duration for smoother animation
@@ -70,11 +77,12 @@ const VHSGrainOverlay: React.FC<VHSGrainOverlayProps> = ({
             radial-gradient(circle at 20% 20%, rgba(255,200,150,0.008) 1px, transparent 1px),
             radial-gradient(circle at 80% 80%, rgba(150,200,255,0.008) 1px, transparent 1px)
           `,
-          backgroundSize: "300px 300px, 250px 250px",
+          backgroundSize:
+            "clamp(200px, 20vw, 300px) clamp(200px, 20vw, 300px), clamp(150px, 18vw, 250px) clamp(150px, 18vw, 250px)",
           mixBlendMode: "color",
         }}
         animate={{
-          backgroundPosition: ["0px 0px, 0px 0px", "300px 300px, 250px 250px"],
+          backgroundPosition: ["0px 0px, 0px 0px", "clamp(200px, 20vw, 300px) clamp(200px, 20vw, 300px), clamp(150px, 18vw, 250px) clamp(150px, 18vw, 250px)"],
         }}
         transition={{
           duration: 30 / speed, // Increased duration for smoother animation

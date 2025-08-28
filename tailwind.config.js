@@ -64,6 +64,7 @@ export default {
     },
   },
   plugins: [
+    require('@tailwindcss/typography'),
     function ({ addComponents, theme }) {
       addComponents({
         ".card": {
